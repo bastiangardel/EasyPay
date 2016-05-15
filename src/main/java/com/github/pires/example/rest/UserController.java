@@ -7,6 +7,7 @@ import com.github.pires.example.repository.PermissionRepository;
 import com.github.pires.example.repository.RoleRepository;
 import com.github.pires.example.repository.UserRepository;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.shiro.SecurityUtils;
@@ -15,6 +16,9 @@ import org.apache.shiro.authc.credential.DefaultPasswordService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.authz.annotation.RequiresUser;
+import org.apache.shiro.mgt.DefaultSecurityManager;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.session.mgt.DefaultSessionManager;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,6 +61,16 @@ public class UserController {
         subject.login(credentials);
         // set attribute that will allow session querying
         subject.getSession().setAttribute("email", credentials.getUsername());
+    }
+
+
+    @RequestMapping(value = "/logout", method = POST)
+    @RequiresAuthentication
+    public void logout() {
+        log.info("logout {}");
+        final Subject subject = SecurityUtils.getSubject();
+        subject.logout();
+
     }
 
     @RequestMapping(method = GET)

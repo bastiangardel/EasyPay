@@ -38,13 +38,13 @@ mvn clean package spring-boot:run
 ### Initialize test scenario
 
 ```
-curl -i -H "Accept: application/json" -X PUT http://localhost:9000/users
+curl -i -H "Accept: application/json" -X PUT https://localhost:9000/users
 ```
 
 ### Access protected method without being authenticated
 
 ```
-curl -i -H "Accept: application/json" -X GET http://localhost:9000/users
+curl -i -H "Accept: application/json" -X GET https://localhost:9000/users
 ```
 
 You should get a ```401 Unauthorized``` response status.
@@ -52,7 +52,7 @@ You should get a ```401 Unauthorized``` response status.
 ### Log-in
 
 ```
-curl -i -c cookie.txt -H "Accept: application/json" -H "Content-type: application/json" -X POST -d '{"username":"test@test.com","password":"test"}' http://localhost:9000/users/auth
+curl -i -c cookie.txt -H "Accept: application/json" -H "Content-type: application/json" -X POST -d '{"username":"test@test.com","password":"test"}' https://localhost:9000/users/auth
 ```
 
 You should get a ```200 OK``` response status and have a valid cookie stored in ```cookie.txt```.
@@ -60,7 +60,7 @@ You should get a ```200 OK``` response status and have a valid cookie stored in 
 ### Access protected method again
 
 ```
-curl -i -b cookie.txt -H "Accept: application/json" -X GET http://localhost:9000/users
+curl -i -b cookie.txt -H "Accept: application/json" -X GET https://localhost:9000/users
 ```
 
 You should get a ```200 OK``` response status and some JSON representing existing users.
@@ -68,7 +68,7 @@ You should get a ```200 OK``` response status and some JSON representing existin
 ### Access another protected method to which you don't have permission
 
 ```
-curl -i -b cookie.txt -H "Accept: application/json" -X GET http://localhost:9000/users/do_something
+curl -i -b cookie.txt -H "Accept: application/json" -X GET https://localhost:9000/users/do_something
 ```
 
 You should get a ```401 Unauthorized``` response status.

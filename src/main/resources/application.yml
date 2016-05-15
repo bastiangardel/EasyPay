@@ -2,3 +2,10 @@ spring.data.orient:
   url: memory:orientdb/test1test
   username: admin
   password: admin
+
+
+server.port: 9000
+server.ssl.key-store: keystore.p12
+server.ssl.key-store-password: Cyberspider
+server.ssl.keyStoreType: PKCS12
+server.ssl.keyAlias: tomcat

@@ -49,10 +49,10 @@ import org.testng.annotations.Test;
         = {DependencyInjectionTestExecutionListener.class})
 public class UserControllerTest extends AbstractTestNGSpringContextTests {
 
-    private final String BASE_URL = "http://localhost:8080/users";
+    private final String BASE_URL = "https://localhost:9000/users";
     private final String USER_NAME = "Paulo Pires";
-    private final String USER_EMAIL = "pjpires@gmail.com";
-    private final String USER_PWD = "123qwe";
+    private final String USER_EMAIL = "test@test.com";
+    private final String USER_PWD = "test";
     @Autowired
     private DefaultPasswordService passwordService;
     @Autowired

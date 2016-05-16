@@ -22,8 +22,17 @@ public class User {
     private String name;
     private Boolean active;
     private String password;
+    private long  amount;
+
     @OneToMany
     private List<Role> roles;
+
+
+
+    @OneToMany
+    private List<Receipt> ReceiptHistory;
+
+
 
     public String getId() {
         return id;
@@ -90,6 +99,25 @@ public class User {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    public long getAmount() {
+        return amount;
+    }
+
+    public void setAmount(long amount) {
+        this.amount = amount;
+    }
+
+    public List<Receipt> getReceiptHistory() {
+        if (ReceiptHistory == null) {
+            this.ReceiptHistory = new ArrayList<>();
+        }
+        return ReceiptHistory;
+    }
+
+    public void setReceiptHistory(List<Receipt> receiptHistory) {
+        ReceiptHistory = receiptHistory;
     }
 
 }

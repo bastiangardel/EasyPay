@@ -1,25 +1,18 @@
 package com.github.pires.example.shiro;
 
-import com.hazelcast.config.Config;
-import com.hazelcast.config.GroupConfig;
-import com.hazelcast.config.JoinConfig;
-import com.hazelcast.config.MulticastConfig;
-import com.hazelcast.config.NetworkConfig;
-import com.hazelcast.config.SSLConfig;
-import com.hazelcast.config.TcpIpConfig;
+import com.hazelcast.config.*;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
-
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.UUID;
-
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
 import org.apache.shiro.session.mgt.eis.AbstractSessionDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.UUID;
 
 /**
  * Data Access Object for Shiro {@link Session} persistence in Hazelcast.

@@ -1,11 +1,10 @@
 package com.github.pires.example.shiro;
 
 import com.hazelcast.query.Predicate;
+import org.apache.shiro.session.Session;
 
 import java.io.Serializable;
 import java.util.Map;
-
-import org.apache.shiro.session.Session;
 
 /**
  * Hazelcast query predicate for Shiro session attributes.

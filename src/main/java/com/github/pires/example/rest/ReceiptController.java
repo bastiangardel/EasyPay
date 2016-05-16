@@ -4,7 +4,6 @@ import com.github.pires.example.model.CheckOut;
 import com.github.pires.example.model.Receipt;
 import com.github.pires.example.repository.CheckOutRepository;
 import com.github.pires.example.repository.ReceiptRepository;
-import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.slf4j.Logger;

@@ -30,7 +30,7 @@ public class CheckOutController {
 
     @RequestMapping(method = POST)
     @RequiresAuthentication
-    @RequiresRoles(value = {"SELLER", "ADMIN"}, logical = Logical.OR)
+    @RequiresRoles("ADMIN")
     public void create(@RequestBody CheckOut checkOut) {
         log.info("create new Checkout {}");
 

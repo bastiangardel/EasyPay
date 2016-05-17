@@ -11,5 +11,5 @@ import org.springframework.data.orient.object.repository.OrientObjectRepository;
  */
 public interface CheckOutRepository extends OrientObjectRepository<CheckOut> {
 
-    CheckOut findByUUID(String UUID);
+    CheckOut findByUuid(String uuid);
 }

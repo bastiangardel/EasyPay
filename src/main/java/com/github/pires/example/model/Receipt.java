@@ -1,10 +1,12 @@
 package com.github.pires.example.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Version;
+import java.util.Date;
 
 /**
  * Created by bastiangardel on 15.05.16.
@@ -15,11 +17,17 @@ public class Receipt {
     private String id;
 
     @Version
-    @JsonIgnore
     private Long version;
-    private Long created;
+
+    @CreatedDate
+    private Date created;
+
+
     private long amount;
     private boolean ispaid;
+
+    @OneToOne
+    private User paiyedBy;
 
     public long getAmount() {
         return amount;
@@ -29,11 +37,11 @@ public class Receipt {
         this.amount = amount;
     }
 
-    public Long getCreated() {
+    public Date getCreated() {
         return created;
     }
 
-    public void setCreated(Long created) {
+    public void setCreated(Date created) {
         this.created = created;
     }
 
@@ -59,5 +67,13 @@ public class Receipt {
 
     public void setVersion(Long version) {
         this.version = version;
+    }
+
+    public User getPaiyedBy() {
+        return paiyedBy;
+    }
+
+    public void setPaiyedBy(User paiyedBy) {
+        this.paiyedBy = paiyedBy;
     }
 }

@@ -23,6 +23,7 @@ public class ShiroConfiguration {
     public ShiroFilterFactoryBean shiroFilter() {
         ShiroFilterFactoryBean factoryBean = new ShiroFilterFactoryBean();
         factoryBean.setSecurityManager(securityManager());
+
         return factoryBean;
     }
 

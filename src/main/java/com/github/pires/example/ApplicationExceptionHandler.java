@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import javax.persistence.EntityNotFoundException;
+
 /**
  * TODO add description
  */
@@ -21,6 +23,13 @@ public class ApplicationExceptionHandler {
             {AuthenticationException.class, UnknownAccountException.class,
                     UnauthenticatedException.class, IncorrectCredentialsException.class, UnauthorizedException.class})
     public void unauthorized() {
+    }
+
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(
+            {EntityNotFoundException.class})
+    public void ressourceNotFound() {
     }
 
 }

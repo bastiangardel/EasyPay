@@ -1,12 +1,11 @@
 package com.github.pires.example.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.data.annotation.CreatedDate;
 
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,23 +16,26 @@ public class CheckOut {
     @Id
     private String id;
 
-    @JsonIgnore
+    @Version
     private Long version;
-    private Long created;
-    private String UUID;
+
+    @CreatedDate
+    private Date created;
+
+    private String uuid;
     private String name;
 
     @OneToOne
-    private User Owner;
+    private User owner;
 
     @OneToMany
-    private List<Receipt> ReceiptsHistory;
+    private List<Receipt> receiptsHistory;
 
-    public Long getCreated() {
+    public Date getCreated() {
         return created;
     }
 
-    public void setCreated(Long created) {
+    public void setCreated(Date created) {
         this.created = created;
     }
 
@@ -54,30 +56,30 @@ public class CheckOut {
     }
 
     public User getOwner() {
-        return Owner;
+        return owner;
     }
 
     public void setOwner(User owner) {
-        Owner = owner;
+        this.owner = owner;
     }
 
     public List<Receipt> getReceiptsHistory() {
-        if (ReceiptsHistory == null) {
-            this.ReceiptsHistory = new ArrayList<>();
+        if (receiptsHistory == null) {
+            this.receiptsHistory = new ArrayList<>();
         }
-        return ReceiptsHistory;
+        return receiptsHistory;
     }
 
     public void setReceiptsHistory(List<Receipt> receiptsHistory) {
-        ReceiptsHistory = receiptsHistory;
+        this.receiptsHistory = receiptsHistory;
     }
 
-    public String getUUID() {
-        return UUID;
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setUUID(String UUID) {
-        this.UUID = UUID;
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public Long getVersion() {
@@ -87,4 +89,9 @@ public class CheckOut {
     public void setVersion(Long version) {
         this.version = version;
     }
+
+/*    @PrePersist
+    protected void onCreate() {
+        created = new Date();
+    }*/
 }

@@ -1,13 +1,11 @@
 package com.github.pires.example.rest;
 
+import com.github.pires.example.dto.CredentialDTO;
 import com.github.pires.example.model.Permission;
 import com.github.pires.example.model.Role;
 import com.github.pires.example.model.User;
-import com.github.pires.example.repository.PermissionRepository;
-import com.github.pires.example.repository.RoleRepository;
-import com.github.pires.example.repository.UserRepository;
+import com.github.pires.example.repository.*;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.DefaultPasswordService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresRoles;
@@ -45,13 +43,23 @@ public class UserController {
     @Autowired
     private PermissionRepository permissionRepo;
 
+    @Autowired
+    private CheckOutRepository checkOutRepo;
+
+    @Autowired
+    private ReceiptRepository receiptRepo;
+
     @RequestMapping(value = "/auth", method = POST)
-    public void authenticate(@RequestBody final UsernamePasswordToken credentials) {
-        log.info("Authenticating {}", credentials.getUsername());
+    public void authenticate(@RequestBody final CredentialDTO credentials) {
+
         final Subject subject = SecurityUtils.getSubject();
-        subject.login(credentials);
+
+        log.info("Authenticating {}", credentials.getUsername() + " : " + subject.getSession().getHost());
+
+        subject.login(credentials.daoToModel(subject.getSession().getHost()));
         // set attribute that will allow session querying
         subject.getSession().setAttribute("email", credentials.getUsername());
+
     }
 
 
@@ -61,19 +69,6 @@ public class UserController {
         log.info("logout {}");
         final Subject subject = SecurityUtils.getSubject();
         subject.logout();
-    }
-
-    @RequestMapping(value = "/amount", method = GET)
-    @RequiresAuthentication
-    public Long getAmount() {
-        final Subject subject = SecurityUtils.getSubject();
-
-        String mail = (String) subject.getSession().getAttribute("email");
-        User user = userRepo.findByEmail(mail);
-
-        log.info("getAMOUNT {}", user.getAmount());
-
-        return user.getAmount();
     }
 
     @RequestMapping(value = "/signin", method = POST)
@@ -104,6 +99,8 @@ public class UserController {
         userRepo.deleteAll();
         roleRepo.deleteAll();
         permissionRepo.deleteAll();
+        checkOutRepo.deleteAll();
+        receiptRepo.deleteAll();
         // define permissions
         final Permission p1 = new Permission();
         p1.setName("VIEW_ALL_USERS");

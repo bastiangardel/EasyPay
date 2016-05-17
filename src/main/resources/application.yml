@@ -5,7 +5,14 @@ spring.data.orient:
 
 
 server.port: 9000
+server.ssl.enabled: true
 server.ssl.key-store: keystore.p12
 server.ssl.key-store-password: Cyberspider
 server.ssl.keyStoreType: PKCS12
 server.ssl.keyAlias: tomcat
+
+endpoints.enabled: false
+jmx.enabled: false
+
+
+-- server.ssl.client-auth: need

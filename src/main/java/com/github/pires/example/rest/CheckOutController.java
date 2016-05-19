@@ -1,14 +1,15 @@
 package com.github.pires.example.rest;
 
+import com.github.pires.example.Exception.CheckOutNotFoundException;
+import com.github.pires.example.Exception.UserNotFoundException;
 import com.github.pires.example.dto.CheckOutCreationDTO;
+import com.github.pires.example.dto.SuccessMessageDTO;
 import com.github.pires.example.model.CheckOut;
 import com.github.pires.example.model.User;
 import com.github.pires.example.repository.CheckOutRepository;
 import com.github.pires.example.repository.UserRepository;
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresRoles;
-import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,14 +42,25 @@ public class CheckOutController {
     @RequestMapping(method = POST)
     @RequiresAuthentication
     @RequiresRoles("ADMIN")
-    public void create(@RequestBody CheckOutCreationDTO checkOutCreationDTO) {
+    public SuccessMessageDTO create(@RequestBody CheckOutCreationDTO checkOutCreationDTO) {
         log.info("create new Checkout {}", checkOutCreationDTO.getUuid());
 
-        final Subject subject = SecurityUtils.getSubject();
+        User user;
 
-        User user = userRepo.findByEmail((String) subject.getSession().getAttribute("email"));
+        String email = checkOutCreationDTO.getEmail();
+
+        if (email == null)
+            email = "";
+
+        try {
+             user = userRepo.findByEmail(email);
+        }catch (ArrayIndexOutOfBoundsException e) {
+            throw new UserNotFoundException("Not found User with Username : " + email);
+        }
+
         checkoutRepo.save(checkOutCreationDTO.dtoToModel(user));
 
+        return new SuccessMessageDTO("Creation with Success");
     }
 
 

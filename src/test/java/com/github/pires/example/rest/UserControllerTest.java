@@ -40,7 +40,7 @@ import static org.testng.AssertJUnit.assertEquals;
         = {DependencyInjectionTestExecutionListener.class})
 public class UserControllerTest extends AbstractTestNGSpringContextTests {
 
-    private final String BASE_URL = "https://localhost:9000/users";
+    private final String BASE_URL = "https://localhost:9000";
     private final String USER_NAME = "Paulo Pires";
     private final String USER_EMAIL = "test@test.com";
     private final String USER_PWD = "test";
@@ -94,7 +94,7 @@ public class UserControllerTest extends AbstractTestNGSpringContextTests {
                 new UsernamePasswordToken(USER_EMAIL, USER_PWD));
         System.out.println(json);
         final ResponseEntity<String> response = new TestRestTemplate(
-                HttpClientOption.ENABLE_COOKIES).exchange(BASE_URL.concat("/auth"),
+                HttpClientOption.ENABLE_COOKIES).exchange(BASE_URL.concat("/users/auth"),
                 HttpMethod.POST, new HttpEntity<>(json, headers), String.class);
         assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
     }
@@ -109,8 +109,30 @@ public class UserControllerTest extends AbstractTestNGSpringContextTests {
                 new UsernamePasswordToken(USER_EMAIL, "wrong password"));
         System.out.println(json);
         final ResponseEntity<String> response = new TestRestTemplate(
-                HttpClientOption.ENABLE_COOKIES).exchange(BASE_URL.concat("/auth"),
+                HttpClientOption.ENABLE_COOKIES).exchange(BASE_URL.concat("/users/auth"),
                 HttpMethod.POST, new HttpEntity<>(json, headers), String.class);
+        assertThat(response.getStatusCode(), equalTo(HttpStatus.UNAUTHORIZED));
+    }
+
+    @Test
+    public void test_get_User_with_no_cookies() throws JsonProcessingException {
+        // authenticate
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        final ResponseEntity<String> response = new TestRestTemplate(
+                HttpClientOption.ENABLE_COOKIES).exchange(BASE_URL.concat("/users"),
+                HttpMethod.GET, new HttpEntity<>(headers), String.class);
+        assertThat(response.getStatusCode(), equalTo(HttpStatus.UNAUTHORIZED));
+    }
+
+    @Test
+    public void test_get_CheckOut_with_no_cookies() throws JsonProcessingException {
+        // authenticate
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        final ResponseEntity<String> response = new TestRestTemplate(
+                HttpClientOption.ENABLE_COOKIES).exchange(BASE_URL.concat("/checkouts"),
+                HttpMethod.GET, new HttpEntity<>(headers), String.class);
         assertThat(response.getStatusCode(), equalTo(HttpStatus.UNAUTHORIZED));
     }
 

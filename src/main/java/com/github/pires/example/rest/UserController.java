@@ -1,6 +1,7 @@
 package com.github.pires.example.rest;
 
 import com.github.pires.example.dto.CredentialDTO;
+import com.github.pires.example.model.CheckOut;
 import com.github.pires.example.model.Permission;
 import com.github.pires.example.model.Role;
 import com.github.pires.example.model.User;
@@ -82,6 +83,7 @@ public class UserController {
     @RequiresAuthentication
     @RequiresRoles("ADMIN" )
     public List<User> getAll() {
+        log.info("Get All User");
         return userRepo.findAll();
     }
 
@@ -108,11 +110,18 @@ public class UserController {
         final Permission p2 = new Permission();
         p2.setName("DO_SOMETHING");
         permissionRepo.save(p2);
+        final Permission p3 = new Permission();
+        p2.setName("Selling");
+        permissionRepo.save(p2);
         // define roles
         final Role roleAdmin = new Role();
         roleAdmin.setName("ADMIN");
         roleAdmin.getPermissions().add(p1);
         roleRepo.save(roleAdmin);
+        final Role roleSeller = new Role();
+        roleSeller.setName("SELLER");
+        roleSeller.getPermissions().add(p3);
+        roleRepo.save(roleSeller);
         // define user
         final User user = new User();
         user.setActive(true);
@@ -123,6 +132,32 @@ public class UserController {
         user.getRoles().add(roleAdmin);
         user.setAmount(100);
         userRepo.save(user);
+
+        final User user2 = new User();
+        user2.setActive(true);
+        user2.setCreated(System.currentTimeMillis());
+        user2.setEmail("test2@test.com");
+        user2.setName("Bastian Gardel");
+        user2.setPassword(passwordService.encryptPassword("test"));
+        user2.getRoles().add(roleSeller);
+        user2.setAmount(100);
+        userRepo.save(user2);
+
+        final User user3 = new User();
+        user3.setActive(true);
+        user3.setCreated(System.currentTimeMillis());
+        user3.setEmail("test3@test.com");
+        user3.setName("David Dupont");
+        user3.setPassword(passwordService.encryptPassword("test"));
+        user3.getRoles().add(roleSeller);
+        user3.setAmount(100);
+        userRepo.save(user3);
+
+
+/*        final CheckOut checkOut = new CheckOut();
+        checkOut.setOwner(user2);
+        checkOut.setUuid();*/
+
         log.info("Scenario initiated.");
     }
 

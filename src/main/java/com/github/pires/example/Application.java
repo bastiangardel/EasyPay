@@ -72,7 +72,7 @@ public class Application {
                                 typeResolver.resolve(ResponseEntity.class, WildcardType.class)),
                                 typeResolver.resolve(WildcardType.class)))
                 .useDefaultResponseMessages(false)
-                .enableUrlTemplating(true)
+                .enableUrlTemplating(false)
                 .tags(new Tag("EasyPay Service", "All apis relating to EasyPay"));
 
     }

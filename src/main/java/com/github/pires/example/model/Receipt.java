@@ -22,7 +22,6 @@ public class Receipt {
     @CreatedDate
     private Date created;
 
-
     private long amount;
     private boolean ispaid;
 

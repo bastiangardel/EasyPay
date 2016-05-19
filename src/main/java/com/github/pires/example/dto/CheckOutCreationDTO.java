@@ -12,6 +12,7 @@ public class CheckOutCreationDTO {
 
     private String uuid;
     private String name;
+    private String email;
 
     public CheckOut dtoToModel(User user)
     {
@@ -44,5 +45,13 @@ public class CheckOutCreationDTO {
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

@@ -65,10 +65,19 @@ public class CheckOutController {
         }catch (ArrayIndexOutOfBoundsException e) {
 
 
-            checkoutRepo.save(checkOutCreationDTO.dtoToModel(user));
+            checkOut = checkoutRepo.save(checkOutCreationDTO.dtoToModel(user));
+
+            List<CheckOut> list = user.getCheckoutInPossesion();
+
+            list.add(checkOut);
+
+            user.setCheckoutInPossesion(list);
+
+            userRepo.save(user);
 
             return new SuccessMessageDTO("Creation with Success");
         }
+
 
 
         throw new UUIDAlreadyInUseException("UUID " + checkOutCreationDTO.getUuid() + " already in use");

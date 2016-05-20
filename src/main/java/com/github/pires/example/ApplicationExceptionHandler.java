@@ -19,37 +19,11 @@ import javax.persistence.EntityNotFoundException;
 @ControllerAdvice
 public class ApplicationExceptionHandler {
 
-    @ResponseStatus(value = HttpStatus.UNAUTHORIZED, reason = "Login Fail!")
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(
-            {AuthenticationException.class})
-    public void unauthorized1() {
-    }
-
-    @ResponseStatus(value = HttpStatus.UNAUTHORIZED, reason = "This account is not in the system!")
-    @ExceptionHandler(
-            {UnknownAccountException.class})
-    public void unauthorized2() {
-    }
-
-
-    @ResponseStatus(value = HttpStatus.UNAUTHORIZED, reason = "You are not authenticated!")
-    @ExceptionHandler(
-            {UnauthenticatedException.class})
-    public void unauthorized3() {
-    }
-
-
-    @ResponseStatus(value = HttpStatus.UNAUTHORIZED, reason = "The credentials are incorrect!")
-    @ExceptionHandler(
-            {IncorrectCredentialsException.class})
-    public void unauthorized4() {
-    }
-
-
-    @ResponseStatus(value = HttpStatus.UNAUTHORIZED, reason = "You are not authorize to access this resource!")
-    @ExceptionHandler(
-            {UnauthorizedException.class})
-    public void unauthorized5() {
+            {AuthenticationException.class, UnknownAccountException.class,
+                    UnauthenticatedException.class, IncorrectCredentialsException.class, UnauthorizedException.class})
+    public void unauthorized() {
     }
 
 
@@ -85,7 +59,7 @@ public class ApplicationExceptionHandler {
     public void uuidAlreadyInUse() {
     }
 
-    @ResponseStatus(value = HttpStatus.PRECONDITION_FAILED, reason = "You don't have enough money on your account!")
+    @ResponseStatus(value = HttpStatus.PRECONDITION_FAILED, reason = "You don't have enough money!")
     @ExceptionHandler(
             {NotEnoughMoneyException.class})
     public void notEnoughMoney() {

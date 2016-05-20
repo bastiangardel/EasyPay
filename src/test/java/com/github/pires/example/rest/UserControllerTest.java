@@ -13,6 +13,7 @@ import com.github.pires.example.repository.RoleRepository;
 import com.github.pires.example.repository.UserRepository;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.DefaultPasswordService;
+import org.junit.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -24,6 +25,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
@@ -97,6 +99,8 @@ public class UserControllerTest extends AbstractTestNGSpringContextTests {
                 HttpClientOption.ENABLE_COOKIES).exchange(BASE_URL.concat("/users/auth"),
                 HttpMethod.POST, new HttpEntity<>(json, headers), String.class);
         assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
+
+
     }
 
     @Test
@@ -119,19 +123,19 @@ public class UserControllerTest extends AbstractTestNGSpringContextTests {
         // authenticate
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-        final ResponseEntity<String> response = new TestRestTemplate(
-                HttpClientOption.ENABLE_COOKIES).exchange(BASE_URL.concat("/users"),
+        final ResponseEntity<String> response = new TestRestTemplate().exchange(BASE_URL.concat("/users"),
                 HttpMethod.GET, new HttpEntity<>(headers), String.class);
         assertThat(response.getStatusCode(), equalTo(HttpStatus.UNAUTHORIZED));
     }
+
+
 
     @Test
     public void test_get_CheckOut_with_no_cookies() throws JsonProcessingException {
         // authenticate
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-        final ResponseEntity<String> response = new TestRestTemplate(
-                HttpClientOption.ENABLE_COOKIES).exchange(BASE_URL.concat("/checkouts"),
+        final ResponseEntity<String> response = new TestRestTemplate().exchange(BASE_URL.concat("/checkouts"),
                 HttpMethod.GET, new HttpEntity<>(headers), String.class);
         assertThat(response.getStatusCode(), equalTo(HttpStatus.UNAUTHORIZED));
     }

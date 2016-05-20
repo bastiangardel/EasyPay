@@ -147,7 +147,7 @@ public class ReceiptController {
         }catch (IndexOutOfBoundsException e){
             throw new ReceiptNotFoundException("Not found Receipt with ID : " + receiptPayDTO.getId());
         }
-        
+
         User user = userRepo.findByEmail((String) subject.getSession().getAttribute("email"));
 
         if (receipt.getAmount() > user.getAmount())

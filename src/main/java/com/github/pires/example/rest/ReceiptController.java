@@ -1,14 +1,18 @@
 package com.github.pires.example.rest;
 
 import com.github.pires.example.Exception.CheckOutNotFoundException;
+import com.github.pires.example.Exception.NotEnoughMoneyException;
 import com.github.pires.example.Exception.ReceiptAlreadyPayExeption;
+import com.github.pires.example.Exception.ReceiptNotFoundException;
 import com.github.pires.example.dto.ReceiptCreationDTO;
 import com.github.pires.example.dto.ReceiptPayDTO;
 import com.github.pires.example.dto.SuccessMessageDTO;
 import com.github.pires.example.model.CheckOut;
 import com.github.pires.example.model.Receipt;
+import com.github.pires.example.model.User;
 import com.github.pires.example.repository.CheckOutRepository;
 import com.github.pires.example.repository.ReceiptRepository;
+import com.github.pires.example.repository.UserRepository;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
@@ -23,6 +27,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.OPTIONS;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
@@ -39,6 +44,9 @@ public class ReceiptController {
 
     @Autowired
     private CheckOutRepository checkOutRepo;
+
+    @Autowired
+    private UserRepository userRepo;
 
     @RequestMapping(method = POST)
     @RequiresAuthentication
@@ -131,12 +139,32 @@ public class ReceiptController {
     public SuccessMessageDTO paiement(@RequestBody ReceiptPayDTO receiptPayDTO){
         log.info("PayReceipt : {}", receiptPayDTO.getId());
 
+        final Subject subject = SecurityUtils.getSubject();
+        Receipt receipt;
 
-        Receipt receipt = receiptRepo.findOne(receiptPayDTO.getId());
+        try {
+            receipt = receiptRepo.findOne(receiptPayDTO.getId());
+        }catch (IndexOutOfBoundsException e){
+            throw new ReceiptNotFoundException("Not found Receipt with ID : " + receiptPayDTO.getId());
+        }
+        
+        User user = userRepo.findByEmail((String) subject.getSession().getAttribute("email"));
+
+        if (receipt.getAmount() > user.getAmount())
+            throw new NotEnoughMoneyException("You have not enough money in your account!!");
 
 
+        receipt.setIspaid(true);
+        receipt.setPaiyedBy(user);
 
-        return new SuccessMessageDTO("Creation with Success");
+        List<Receipt> list = user.getReceiptHistory();
+        list.add(receipt);
+        user.setReceiptHistory(list);
+
+        userRepo.save(user);
+        receiptRepo.save(receipt);
+
+        return new SuccessMessageDTO("Payment executed with Success");
 
     }
 

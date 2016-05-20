@@ -1,6 +1,7 @@
 package com.github.pires.example.rest;
 
 import com.github.pires.example.Exception.CheckOutNotFoundException;
+import com.github.pires.example.Exception.UUIDAlreadyInUseException;
 import com.github.pires.example.Exception.UserNotFoundException;
 import com.github.pires.example.dto.CheckOutCreationDTO;
 import com.github.pires.example.dto.SuccessMessageDTO;
@@ -46,6 +47,7 @@ public class CheckOutController {
         log.info("create new Checkout {}", checkOutCreationDTO.getUuid());
 
         User user;
+        CheckOut checkOut;
 
         String email = checkOutCreationDTO.getEmail();
 
@@ -58,9 +60,18 @@ public class CheckOutController {
             throw new UserNotFoundException("Not found User with Username : " + email);
         }
 
-        checkoutRepo.save(checkOutCreationDTO.dtoToModel(user));
+        try {
+            checkOut = checkoutRepo.findByUuid(checkOutCreationDTO.getUuid());
+        }catch (ArrayIndexOutOfBoundsException e) {
 
-        return new SuccessMessageDTO("Creation with Success");
+
+            checkoutRepo.save(checkOutCreationDTO.dtoToModel(user));
+
+            return new SuccessMessageDTO("Creation with Success");
+        }
+
+
+        throw new UUIDAlreadyInUseException("UUID " + checkOutCreationDTO.getUuid() + " already in use");
     }
 
 

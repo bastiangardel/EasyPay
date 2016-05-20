@@ -33,6 +33,10 @@ public class User {
     private List<Receipt> ReceiptHistory;
 
 
+    @OneToMany
+    private List<CheckOut> CheckoutInPossesion;
+
+
 
     public String getId() {
         return id;
@@ -120,4 +124,14 @@ public class User {
         ReceiptHistory = receiptHistory;
     }
 
+    public List<CheckOut> getCheckoutInPossesion() {
+        if (CheckoutInPossesion == null) {
+            this.CheckoutInPossesion = new ArrayList<>();
+        }
+        return CheckoutInPossesion;
+    }
+
+    public void setCheckoutInPossesion(List<CheckOut> checkoutInPossesion) {
+        CheckoutInPossesion = checkoutInPossesion;
+    }
 }

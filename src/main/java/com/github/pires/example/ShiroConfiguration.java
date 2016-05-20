@@ -41,7 +41,7 @@ public class ShiroConfiguration {
         final DefaultWebSessionManager sessionManager
                 = new DefaultWebSessionManager();
         sessionManager.setSessionDAO(sessionDao());
-        sessionManager.setGlobalSessionTimeout(43200000); // 12 hours
+        sessionManager.setGlobalSessionTimeout(3600000); // 1 hour
         return sessionManager;
     }
 

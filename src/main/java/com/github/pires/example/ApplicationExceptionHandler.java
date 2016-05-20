@@ -1,8 +1,6 @@
 package com.github.pires.example;
 
-import com.github.pires.example.Exception.CheckOutNotFoundException;
-import com.github.pires.example.Exception.ReceiptAlreadyPayExeption;
-import com.github.pires.example.Exception.UserNotFoundException;
+import com.github.pires.example.Exception.*;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
@@ -21,11 +19,37 @@ import javax.persistence.EntityNotFoundException;
 @ControllerAdvice
 public class ApplicationExceptionHandler {
 
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED, reason = "Login Fail!")
     @ExceptionHandler(
-            {AuthenticationException.class, UnknownAccountException.class,
-                    UnauthenticatedException.class, IncorrectCredentialsException.class, UnauthorizedException.class})
-    public void unauthorized() {
+            {AuthenticationException.class})
+    public void unauthorized1() {
+    }
+
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED, reason = "This account is not in the system!")
+    @ExceptionHandler(
+            {UnknownAccountException.class})
+    public void unauthorized2() {
+    }
+
+
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED, reason = "You are not authenticated!")
+    @ExceptionHandler(
+            {UnauthenticatedException.class})
+    public void unauthorized3() {
+    }
+
+
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED, reason = "The credentials are incorrect!")
+    @ExceptionHandler(
+            {IncorrectCredentialsException.class})
+    public void unauthorized4() {
+    }
+
+
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED, reason = "You are not authorize to access this resource!")
+    @ExceptionHandler(
+            {UnauthorizedException.class})
+    public void unauthorized5() {
     }
 
 
@@ -53,5 +77,17 @@ public class ApplicationExceptionHandler {
     @ExceptionHandler(
             {ReceiptAlreadyPayExeption.class})
     public void receiptAlreadyPay() {
+    }
+
+    @ResponseStatus(value = HttpStatus.PRECONDITION_FAILED, reason = "The UUID is already in use!")
+    @ExceptionHandler(
+            {UUIDAlreadyInUseException.class})
+    public void uuidAlreadyInUse() {
+    }
+
+    @ResponseStatus(value = HttpStatus.PRECONDITION_FAILED, reason = "You don't have enough money on your account!")
+    @ExceptionHandler(
+            {NotEnoughMoneyException.class})
+    public void notEnoughMoney() {
     }
 }

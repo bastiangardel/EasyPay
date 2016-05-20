@@ -1,7 +1,16 @@
+#spring.data.orient:
+#  url: remote:localhost/test1test
+#  username: root
+#  password: sake56ekas
+#  autocreate: true
+
+
+
 spring.data.orient:
-  url: plocal:orientdb/test1test
+  url: memory:orientdb/test1test
   username: admin
   password: admin
+
 
 
 server.port: 9000
@@ -12,6 +21,8 @@ server.ssl.keyStoreType: PKCS12
 server.ssl.keyAlias: tomcat
 
 endpoints.enabled: false
+
+
 
 
 -- server.ssl.client-auth: need

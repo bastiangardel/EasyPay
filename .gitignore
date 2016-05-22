@@ -5,6 +5,11 @@ test-output
 gen
 dependency-reduced-pom.xml
 
+#cert
+*.p12
+*.crt
+*.key
+
 # Idea
 *.iml
 .idea

@@ -1,4 +1,4 @@
-package com.github.pires.example.Exception;
+package com.github.pires.example.exception;
 
 /**
  * Created by bastiangardel on 20.05.16.

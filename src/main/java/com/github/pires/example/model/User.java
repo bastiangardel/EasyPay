@@ -1,7 +1,10 @@
 package com.github.pires.example.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.github.pires.example.rest.View;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -14,27 +17,34 @@ public class User {
 
     @Id
     private String id;
+
     @Version
-    @JsonIgnore
     private Long version;
+
+    @CreatedDate
     private Long created;
+
+
+    @JsonView(View.Summary.class)
     private String email;
+    @JsonView(View.Summary.class)
     private String name;
     private Boolean active;
     private String password;
+    @JsonView(View.Summary.class)
     private long  amount;
 
+    @JsonView(View.Summary.class)
     @OneToMany
     private List<Role> roles;
 
 
+    @OneToMany
+    private List<Receipt> receiptHistory;
+
 
     @OneToMany
-    private List<Receipt> ReceiptHistory;
-
-
-    @OneToMany
-    private List<CheckOut> CheckoutInPossesion;
+    private List<CheckOut> checkoutInPossesion;
 
 
 
@@ -114,24 +124,24 @@ public class User {
     }
 
     public List<Receipt> getReceiptHistory() {
-        if (ReceiptHistory == null) {
-            this.ReceiptHistory = new ArrayList<>();
+        if (receiptHistory == null) {
+            this.receiptHistory = new ArrayList<>();
         }
-        return ReceiptHistory;
+        return receiptHistory;
     }
 
     public void setReceiptHistory(List<Receipt> receiptHistory) {
-        ReceiptHistory = receiptHistory;
+        this.receiptHistory = receiptHistory;
     }
 
     public List<CheckOut> getCheckoutInPossesion() {
-        if (CheckoutInPossesion == null) {
-            this.CheckoutInPossesion = new ArrayList<>();
+        if (checkoutInPossesion == null) {
+            this.checkoutInPossesion = new ArrayList<>();
         }
-        return CheckoutInPossesion;
+        return checkoutInPossesion;
     }
 
     public void setCheckoutInPossesion(List<CheckOut> checkoutInPossesion) {
-        CheckoutInPossesion = checkoutInPossesion;
+        this.checkoutInPossesion = checkoutInPossesion;
     }
 }

@@ -1,9 +1,6 @@
 package com.github.pires.example.rest;
 
-import com.github.pires.example.Exception.CheckOutNotFoundException;
-import com.github.pires.example.Exception.NotEnoughMoneyException;
-import com.github.pires.example.Exception.ReceiptAlreadyPayExeption;
-import com.github.pires.example.Exception.ReceiptNotFoundException;
+import com.github.pires.example.Exception.*;
 import com.github.pires.example.dto.ReceiptCreationDTO;
 import com.github.pires.example.dto.ReceiptPayDTO;
 import com.github.pires.example.dto.SuccessMessageDTO;
@@ -54,17 +51,23 @@ public class ReceiptController {
     public SuccessMessageDTO create(@RequestBody ReceiptCreationDTO receiptCreationDTO){
         log.info("create new Receipt {}");
 
-        CheckOut checkOut = checkOutRepo.findByUuid(receiptCreationDTO.getUuidCheckout());
+        CheckOut checkOut;
 
 
-
-        if(checkOut == null)
-            throw new EntityNotFoundException("Not found CheckOut with UUID : " + receiptCreationDTO.getUuidCheckout());
+        try {
+            checkOut = checkOutRepo.findByUuid(receiptCreationDTO.getUuidCheckout());
+        }catch (IndexOutOfBoundsException e){
+            throw new CheckOutNotFoundException("Not Found CheckOut with UUID : " + receiptCreationDTO.getUuidCheckout());
+        }
 
         final Subject subject = SecurityUtils.getSubject();
 
-        if(checkOut.getOwner().getEmail() != subject.getSession().getAttribute("email"))
-            throw new UnauthorizedException("Your not the owner of this checkout");
+
+        log.info("{} create new Receipt from {}", checkOut.getOwner().getEmail(), subject.getSession().getAttribute("email"));
+
+
+        if(!checkOut.getOwner().getEmail().equals(subject.getSession().getAttribute("email")))
+            throw new OwnerException("Your are not the owner of this checkout");
 
         List<Receipt> list = checkOut.getReceiptsHistory();
 
@@ -72,9 +75,17 @@ public class ReceiptController {
 
         list.add(receipt);
 
-        checkOut.setReceiptsHistory(list);
+        checkOutRepo.save(checkOut);
 
         return new SuccessMessageDTO("Creation with Success");
+    }
+
+    @RequestMapping(method = GET)
+    @RequiresAuthentication
+    @RequiresRoles("ADMIN" )
+    public List<Receipt> getAll() {
+        log.info("Get All Receipt");
+        return receiptRepo.findAll();
     }
 
     @RequestMapping(value = "/pay", method = GET)
@@ -155,11 +166,13 @@ public class ReceiptController {
 
 
         receipt.setIspaid(true);
+
+        user.setAmount(user.getAmount()-receipt.getAmount());
+
         receipt.setPaiyedBy(user);
 
         List<Receipt> list = user.getReceiptHistory();
         list.add(receipt);
-        user.setReceiptHistory(list);
 
         userRepo.save(user);
         receiptRepo.save(receipt);

@@ -1,6 +1,9 @@
 package com.github.pires.example.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.github.pires.example.rest.View;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
@@ -22,9 +25,12 @@ public class CheckOut {
     @CreatedDate
     private Date created;
 
+    @JsonView(View.Summary.class)
     private String uuid;
+    @JsonView(View.Summary.class)
     private String name;
 
+    @JsonView(View.Summary.class)
     @OneToOne
     private User owner;
 

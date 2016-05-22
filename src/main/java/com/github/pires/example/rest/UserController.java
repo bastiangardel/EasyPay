@@ -1,5 +1,6 @@
 package com.github.pires.example.rest;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.github.pires.example.dto.CredentialDTO;
 import com.github.pires.example.model.CheckOut;
 import com.github.pires.example.model.Permission;
@@ -67,8 +68,9 @@ public class UserController {
     @RequestMapping(value = "/logout", method = POST)
     @RequiresAuthentication
     public void logout() {
-        log.info("logout {}");
+
         final Subject subject = SecurityUtils.getSubject();
+        log.info("logout {}",subject.getSession().getAttribute("email"));
         subject.logout();
     }
 
@@ -79,6 +81,7 @@ public class UserController {
         userRepo.save(user);
     }
 
+    @JsonView(View.Summary.class)
     @RequestMapping(method = GET)
     @RequiresAuthentication
     @RequiresRoles("ADMIN" )
@@ -87,11 +90,23 @@ public class UserController {
         return userRepo.findAll();
     }
 
-    @RequestMapping(value = "do_something", method = GET)
+    @RequestMapping(value = "/test", method = POST)
     @RequiresAuthentication
-    @RequiresRoles("DO_SOMETHING")
-    public List<User> dontHavePermission() {
-        return userRepo.findAll();
+    public void test() {
+
+        User user = userRepo.findByEmail("test2@test.com");
+
+
+        CheckOut checkOut = checkOutRepo.save(new CheckOut());
+
+        user.getCheckoutInPossesion().add(checkOut);
+
+        user.setName("dudu toto");
+
+        userRepo.save(user);
+
+        log.info("test");
+
     }
 
     @RequestMapping(method = PUT)
@@ -111,8 +126,8 @@ public class UserController {
         p2.setName("DO_SOMETHING");
         permissionRepo.save(p2);
         final Permission p3 = new Permission();
-        p2.setName("Selling");
-        permissionRepo.save(p2);
+        p3.setName("SELLING");
+        permissionRepo.save(p3);
         // define roles
         final Role roleAdmin = new Role();
         roleAdmin.setName("ADMIN");

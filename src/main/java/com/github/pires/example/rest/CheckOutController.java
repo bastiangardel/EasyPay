@@ -1,16 +1,20 @@
 package com.github.pires.example.rest;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.github.pires.example.Exception.CheckOutNotFoundException;
 import com.github.pires.example.Exception.UUIDAlreadyInUseException;
 import com.github.pires.example.Exception.UserNotFoundException;
 import com.github.pires.example.dto.CheckOutCreationDTO;
 import com.github.pires.example.dto.SuccessMessageDTO;
 import com.github.pires.example.model.CheckOut;
+import com.github.pires.example.model.Receipt;
 import com.github.pires.example.model.User;
 import com.github.pires.example.repository.CheckOutRepository;
 import com.github.pires.example.repository.UserRepository;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.OPTIONS;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
@@ -56,34 +61,35 @@ public class CheckOutController {
 
         try {
              user = userRepo.findByEmail(email);
-        }catch (ArrayIndexOutOfBoundsException e) {
+        }
+        catch (IndexOutOfBoundsException e) {
             throw new UserNotFoundException("Not found User with Username : " + email);
         }
 
+        log.info("create new Checkout to user {}", user.getEmail());
+
         try {
             checkOut = checkoutRepo.findByUuid(checkOutCreationDTO.getUuid());
-        }catch (ArrayIndexOutOfBoundsException e) {
-
-
-            checkOut = checkoutRepo.save(checkOutCreationDTO.dtoToModel(user));
+        }catch (IndexOutOfBoundsException e) {
 
             List<CheckOut> list = user.getCheckoutInPossesion();
 
-            list.add(checkOut);
+            checkOut = checkoutRepo.save(checkOutCreationDTO.dtoToModel(user));
 
-            user.setCheckoutInPossesion(list);
+            list.add(checkOut);
 
             userRepo.save(user);
 
+
             return new SuccessMessageDTO("Creation with Success");
         }
-
 
 
         throw new UUIDAlreadyInUseException("UUID " + checkOutCreationDTO.getUuid() + " already in use");
     }
 
 
+    @JsonView(View.Summary.class)
     @RequestMapping(method = GET)
     @RequiresAuthentication
     @RequiresRoles("ADMIN")
@@ -91,5 +97,18 @@ public class CheckOutController {
         log.info("getAll Checkouts {}");
 
         return checkoutRepo.findAll();
+    }
+
+    @JsonView(View.Summary.class)
+    @RequestMapping(value = "/checkoutlist", method = GET)
+    @RequiresAuthentication
+    public List<CheckOut> getUserCheckOuts() {
+        log.info("get User Checkouts {}");
+        final Subject subject = SecurityUtils.getSubject();
+        String email = (String) subject.getSession().getAttribute("email");
+
+        User user = userRepo.findByEmail(email);
+
+        return user.getCheckoutInPossesion();
     }
 }

@@ -26,6 +26,12 @@ public class ApplicationExceptionHandler {
     public void unauthorized() {
     }
 
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED, reason = "You are not the owner of this checkout")
+    @ExceptionHandler(
+            {OwnerException.class})
+    public void owner() {
+    }
+
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(

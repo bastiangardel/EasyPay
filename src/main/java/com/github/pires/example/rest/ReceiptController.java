@@ -1,6 +1,6 @@
 package com.github.pires.example.rest;
 
-import com.github.pires.example.Exception.*;
+import com.github.pires.example.exception.*;
 import com.github.pires.example.dto.ReceiptCreationDTO;
 import com.github.pires.example.dto.ReceiptPayDTO;
 import com.github.pires.example.dto.SuccessMessageDTO;
@@ -20,11 +20,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.OPTIONS;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
@@ -111,7 +109,7 @@ public class ReceiptController {
         Receipt receipt = list.get(0);
 
         if (receipt.ispaid())
-            throw new ReceiptAlreadyPayExeption("Receipt with id : " + receipt.getId() + " already pay");
+            throw new NoReceiptToPayExeption("Receipt with id : " + receipt.getId() + " already pay");
 
         return  receiptPayDTO.modelToDto(receipt);
 

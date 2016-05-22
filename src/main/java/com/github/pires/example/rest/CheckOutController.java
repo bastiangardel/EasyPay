@@ -1,13 +1,11 @@
 package com.github.pires.example.rest;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.github.pires.example.Exception.CheckOutNotFoundException;
-import com.github.pires.example.Exception.UUIDAlreadyInUseException;
-import com.github.pires.example.Exception.UserNotFoundException;
+import com.github.pires.example.exception.UUIDAlreadyInUseException;
+import com.github.pires.example.exception.UserNotFoundException;
 import com.github.pires.example.dto.CheckOutCreationDTO;
 import com.github.pires.example.dto.SuccessMessageDTO;
 import com.github.pires.example.model.CheckOut;
-import com.github.pires.example.model.Receipt;
 import com.github.pires.example.model.User;
 import com.github.pires.example.repository.CheckOutRepository;
 import com.github.pires.example.repository.UserRepository;
@@ -25,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.OPTIONS;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**

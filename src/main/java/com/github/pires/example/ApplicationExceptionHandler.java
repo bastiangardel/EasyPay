@@ -1,6 +1,6 @@
 package com.github.pires.example;
 
-import com.github.pires.example.Exception.*;
+import com.github.pires.example.exception.*;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
@@ -53,9 +53,9 @@ public class ApplicationExceptionHandler {
     public void userNotFound() {
     }
 
-    @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The receipt is already pay!")
+    @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "No receipt to pay in this checkout!")
     @ExceptionHandler(
-            {ReceiptAlreadyPayExeption.class})
+            {NoReceiptToPayExeption.class})
     public void receiptAlreadyPay() {
     }
 

@@ -32,7 +32,7 @@ public class User {
     private Boolean active;
     private String password;
     @JsonView(View.Summary.class)
-    private long  amount;
+    private Double  amount;
 
     @JsonView(View.Summary.class)
     @OneToMany
@@ -115,11 +115,11 @@ public class User {
         this.roles = roles;
     }
 
-    public long getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public void setAmount(long amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 

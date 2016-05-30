@@ -9,13 +9,13 @@ import javax.persistence.Version;
 import java.util.ArrayList;
 import java.util.List;
 
-@JsonIgnoreProperties(value = {"handler"})
+//@JsonIgnoreProperties(value = {"handler"})
 public class Role {
 
     @Id
     private String id;
     @Version
-    @JsonIgnore
+    //@JsonIgnore
     private Long version;
     private String name;
     private String description;

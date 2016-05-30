@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.Id;
 import javax.persistence.Version;
 
-@JsonIgnoreProperties(value = {"handler"})
+//@JsonIgnoreProperties(value = {"handler"})
 public class Permission {
 
     @Id

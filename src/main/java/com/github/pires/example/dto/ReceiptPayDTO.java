@@ -6,14 +6,14 @@ import com.github.pires.example.model.Receipt;
  * Created by bastiangardel on 18.05.16.
  */
 public class ReceiptPayDTO {
-    private Long amount;
+    private Double amount;
     private String id;
 
-    public Long getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public void setAmount(Long amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 

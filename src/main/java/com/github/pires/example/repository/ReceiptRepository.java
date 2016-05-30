@@ -1,6 +1,7 @@
 package com.github.pires.example.repository;
 
 import com.github.pires.example.model.Receipt;
+import org.springframework.data.orient.commons.repository.annotation.FetchPlan;
 import org.springframework.data.orient.object.repository.OrientObjectRepository;
 
 /**
@@ -10,5 +11,6 @@ import org.springframework.data.orient.object.repository.OrientObjectRepository;
  * DAO for {@link Receipt}.
  */
 public interface ReceiptRepository extends OrientObjectRepository<Receipt> {
+
 
 }

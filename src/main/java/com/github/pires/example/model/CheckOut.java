@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.github.pires.example.rest.View;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.orient.commons.repository.annotation.FetchPlan;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.util.List;
 /**
  * Created by bastiangardel on 15.05.16.
  */
-@JsonIgnoreProperties(value = {"handler"})
+//@JsonIgnoreProperties(value = {"handler"})
 public class CheckOut {
     @Id
     private String id;
@@ -33,6 +34,7 @@ public class CheckOut {
     @JsonView(View.Summary.class)
     @OneToOne
     private User owner;
+
 
     @OneToMany
     private List<Receipt> receiptsHistory;

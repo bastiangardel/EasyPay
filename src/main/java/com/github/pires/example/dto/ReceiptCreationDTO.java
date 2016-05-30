@@ -10,7 +10,7 @@ import java.util.Date;
 public class ReceiptCreationDTO {
 
     private String uuidCheckout;
-    private Long amount;
+    private Double amount;
 
     public Receipt dtoToModel()
     {
@@ -18,17 +18,17 @@ public class ReceiptCreationDTO {
 
 
         tmp.setAmount(amount);
-        tmp.setIspaid(false);
+        tmp.setPaid(false);
 
         tmp.setCreated(new Date());
         return tmp;
     }
 
-    public Long getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public void setAmount(Long amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 

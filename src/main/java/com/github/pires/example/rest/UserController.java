@@ -1,6 +1,7 @@
 package com.github.pires.example.rest;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.github.pires.example.dto.CheckOutCreationDTO;
 import com.github.pires.example.dto.CredentialDTO;
 import com.github.pires.example.model.CheckOut;
 import com.github.pires.example.model.Permission;
@@ -145,7 +146,7 @@ public class UserController {
         user.setName("Paulo Pires");
         user.setPassword(passwordService.encryptPassword("test"));
         user.getRoles().add(roleAdmin);
-        user.setAmount(100);
+        user.setAmount(100.0);
         userRepo.save(user);
 
         final User user2 = new User();
@@ -155,7 +156,7 @@ public class UserController {
         user2.setName("Bastian Gardel");
         user2.setPassword(passwordService.encryptPassword("test"));
         user2.getRoles().add(roleSeller);
-        user2.setAmount(100);
+        user2.setAmount(100.0);
         userRepo.save(user2);
 
         final User user3 = new User();
@@ -165,13 +166,8 @@ public class UserController {
         user3.setName("David Dupont");
         user3.setPassword(passwordService.encryptPassword("test"));
         user3.getRoles().add(roleSeller);
-        user3.setAmount(100);
+        user3.setAmount(100.0);
         userRepo.save(user3);
-
-
-/*        final CheckOut checkOut = new CheckOut();
-        checkOut.setOwner(user2);
-        checkOut.setUuid();*/
 
         log.info("Scenario initiated.");
     }

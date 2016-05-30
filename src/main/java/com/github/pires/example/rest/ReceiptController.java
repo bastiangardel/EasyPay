@@ -1,5 +1,6 @@
 package com.github.pires.example.rest;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.github.pires.example.exception.*;
 import com.github.pires.example.dto.ReceiptCreationDTO;
 import com.github.pires.example.dto.ReceiptPayDTO;
@@ -18,8 +19,11 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.orient.commons.repository.annotation.FetchPlan;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.FetchType;
+import java.security.acl.Owner;
 import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -78,6 +82,7 @@ public class ReceiptController {
         return new SuccessMessageDTO("Creation with Success");
     }
 
+    @JsonView(View.Summary.class)
     @RequestMapping(method = GET)
     @RequiresAuthentication
     @RequiresRoles("ADMIN" )
@@ -88,6 +93,7 @@ public class ReceiptController {
 
     @RequestMapping(value = "/pay", method = GET)
     @RequiresAuthentication
+    @FetchPlan("*:-1")
     public ReceiptPayDTO getReceiptToPay(@RequestParam("uuid") String uuid){
 
         log.info("Get Receipt from checkOut : {}", uuid);
@@ -100,15 +106,16 @@ public class ReceiptController {
             throw new CheckOutNotFoundException("Not Found CheckOut with UUID : " + uuid);
         }
 
+
         ReceiptPayDTO receiptPayDTO = new ReceiptPayDTO();
 
         List<Receipt> list = checkOut.getReceiptsHistory();
 
-        list.sort((o1, o2) -> o2.getCreated().compareTo(o1.getCreated()));
+        list.sort((o1, o2) -> o1.getCreated().compareTo(o2.getCreated()));
 
         Receipt receipt = list.get(0);
 
-        if (receipt.ispaid())
+        if (receipt.isPaid())
             throw new NoReceiptToPayExeption("Receipt with id : " + receipt.getId() + " already pay");
 
         return  receiptPayDTO.modelToDto(receipt);
@@ -138,14 +145,16 @@ public class ReceiptController {
 
         List<Receipt> list = checkOut.getReceiptsHistory();
 
+        list.sort((o1, o2) -> o1.getCreated().compareTo(o2.getCreated()));
+
         Receipt receipt = list.get(0);
 
-        return  receipt.ispaid();
+        return  receipt.isPaid();
     }
 
     @RequestMapping(value = "/pay", method = POST)
     @RequiresAuthentication
-    public SuccessMessageDTO paiement(@RequestBody ReceiptPayDTO receiptPayDTO){
+    public SuccessMessageDTO paiement(@RequestBody ReceiptPayDTO receiptPayDTO, @RequestParam("uuid") String uuid){
         log.info("PayReceipt : {}", receiptPayDTO.getId());
 
         final Subject subject = SecurityUtils.getSubject();
@@ -157,22 +166,39 @@ public class ReceiptController {
             throw new ReceiptNotFoundException("Not found Receipt with ID : " + receiptPayDTO.getId());
         }
 
+
+        CheckOut checkOut;
+
+        try {
+            checkOut = checkOutRepo.findByUuid(uuid);
+        }catch (IndexOutOfBoundsException e){
+            throw new CheckOutNotFoundException("Not found CheckOut with UUID : " + uuid);
+        }
+
+        User owner = checkOut.getOwner();
+
+        if (receipt.isPaid())
+            throw new NoReceiptToPayExeption("Receipt with id : " + receipt.getId() + " already pay");
+
         User user = userRepo.findByEmail((String) subject.getSession().getAttribute("email"));
 
         if (receipt.getAmount() > user.getAmount())
             throw new NotEnoughMoneyException("You have not enough money in your account!!");
 
 
-        receipt.setIspaid(true);
+        receipt.setPaid(true);
 
-        user.setAmount(user.getAmount()-receipt.getAmount());
+        user.setAmount(user.getAmount() - receipt.getAmount());
 
         receipt.setPaiyedBy(user);
+
+        owner.setAmount(owner.getAmount() + receipt.getAmount());
 
         List<Receipt> list = user.getReceiptHistory();
         list.add(receipt);
 
         userRepo.save(user);
+        userRepo.save(owner);
         receiptRepo.save(receipt);
 
         return new SuccessMessageDTO("Payment executed with Success");

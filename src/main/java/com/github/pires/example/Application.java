@@ -30,12 +30,7 @@ import static springfox.documentation.schema.AlternateTypeRules.newRule;
 
 @EnableAutoConfiguration
 @EnableSwagger2
-@ComponentScan(basePackageClasses = {
-        CheckOutController.class,
-        ReceiptController.class,
-        UserController.class,
-        Application.class
-})
+@ComponentScan
 @Import({springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration.class})
 public class Application {
 

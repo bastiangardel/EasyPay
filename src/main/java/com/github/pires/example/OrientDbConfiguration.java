@@ -20,6 +20,8 @@ public class OrientDbConfiguration {
     @Transactional
     public void registerEntities() {
         factory.db().getEntityManager().registerEntityClasses("com.github.pires.example.model");
+
+
     }
 
 }

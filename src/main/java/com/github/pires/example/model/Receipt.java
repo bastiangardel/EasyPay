@@ -4,23 +4,21 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.github.pires.example.rest.View;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.orient.commons.repository.annotation.FetchPlan;
 
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.Version;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
  * Created by bastiangardel on 15.05.16.
  */
-//@JsonIgnoreProperties(value = {"handler"})
 
+@Entity
+@Table(name = "receipt")
 public class Receipt {
     @JsonView(View.Summary.class)
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @Version
     private Long version;
@@ -54,11 +52,11 @@ public class Receipt {
         this.created = created;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -84,5 +82,19 @@ public class Receipt {
 
     public void setPaiyedBy(User paiyedBy) {
         this.paiyedBy = paiyedBy;
+    }
+
+    public Receipt(Double amount, User paiyedBy, boolean paid) {
+        this.amount = amount;
+        this.paiyedBy = paiyedBy;
+        this.paid = paid;
+    }
+
+    public Receipt() {
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        created = new Date();
     }
 }

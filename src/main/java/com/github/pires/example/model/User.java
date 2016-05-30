@@ -6,17 +6,18 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.github.pires.example.rest.View;
 import org.springframework.data.annotation.CreatedDate;
 
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Version;
+import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-@JsonIgnoreProperties(value = {"handler"})
+@Entity
+@Table(name = "users")
 public class User {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @Version
     private Long version;
@@ -35,7 +36,7 @@ public class User {
     private Double  amount;
 
     @JsonView(View.Summary.class)
-    @OneToMany
+    @ManyToMany
     private List<Role> roles;
 
 
@@ -48,11 +49,11 @@ public class User {
 
 
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -143,5 +144,19 @@ public class User {
 
     public void setCheckoutInPossesion(List<CheckOut> checkoutInPossesion) {
         this.checkoutInPossesion = checkoutInPossesion;
+    }
+
+    public User(Boolean active, Double amount, List<CheckOut> checkoutInPossesion, String email, String name, String password, List<Receipt> receiptHistory, List<Role> roles) {
+        this.active = active;
+        this.amount = amount;
+        this.checkoutInPossesion = checkoutInPossesion;
+        this.email = email;
+        this.name = name;
+        this.password = password;
+        this.receiptHistory = receiptHistory;
+        this.roles = roles;
+    }
+
+    public User() {
     }
 }

@@ -3,7 +3,6 @@ package com.github.pires.example.rest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pires.example.Application;
-import com.github.pires.example.OrientDbConfiguration;
 import com.github.pires.example.ShiroConfiguration;
 import com.github.pires.example.model.Permission;
 import com.github.pires.example.model.Role;
@@ -13,7 +12,6 @@ import com.github.pires.example.repository.RoleRepository;
 import com.github.pires.example.repository.UserRepository;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.DefaultPasswordService;
-import org.junit.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -25,7 +23,6 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
@@ -35,7 +32,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.testng.AssertJUnit.assertEquals;
 
 @SpringApplicationConfiguration(classes
-        = {Application.class, OrientDbConfiguration.class, ShiroConfiguration.class})
+        = {Application.class, ShiroConfiguration.class})
 @WebAppConfiguration
 @IntegrationTest
 @TestExecutionListeners(inheritListeners = false, listeners

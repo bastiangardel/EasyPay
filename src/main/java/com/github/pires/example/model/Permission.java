@@ -3,25 +3,28 @@ package com.github.pires.example.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import javax.persistence.Id;
-import javax.persistence.Version;
+import javax.persistence.*;
 
-//@JsonIgnoreProperties(value = {"handler"})
+@Entity
+@Table(name = "permission")
 public class Permission {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
     @Version
-    @JsonIgnore
     private Long version;
+
     private String name;
+
     private String description;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -49,4 +52,11 @@ public class Permission {
         this.description = description;
     }
 
+    public Permission(String description, String name) {
+        this.description = description;
+        this.name = name;
+    }
+
+    public Permission() {
+    }
 }

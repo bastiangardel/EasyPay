@@ -88,7 +88,7 @@ public class UserController {
     @RequiresRoles("ADMIN" )
     public List<User> getAll() {
         log.info("Get All User");
-        return userRepo.findAll();
+        return (List<User>)userRepo.findAll();
     }
 
     @RequestMapping(value = "/test", method = POST)
@@ -120,24 +120,31 @@ public class UserController {
         checkOutRepo.deleteAll();
         receiptRepo.deleteAll();
         // define permissions
-        final Permission p1 = new Permission();
+        Permission p1 = new Permission();
         p1.setName("VIEW_ALL_USERS");
-        permissionRepo.save(p1);
-        final Permission p2 = new Permission();
+        p1 = permissionRepo.save(p1);
+        Permission p2 = new Permission();
         p2.setName("DO_SOMETHING");
-        permissionRepo.save(p2);
-        final Permission p3 = new Permission();
+        p2 = permissionRepo.save(p2);
+        Permission p3 = new Permission();
         p3.setName("SELLING");
-        permissionRepo.save(p3);
+        p3 = permissionRepo.save(p3);
+        Permission p4 = new Permission();
+        p4.setName("BUYING");
+        p4 = permissionRepo.save(p4);
         // define roles
-        final Role roleAdmin = new Role();
+        Role roleAdmin = new Role();
         roleAdmin.setName("ADMIN");
         roleAdmin.getPermissions().add(p1);
-        roleRepo.save(roleAdmin);
-        final Role roleSeller = new Role();
+        roleAdmin = roleRepo.save(roleAdmin);
+        Role roleSeller = new Role();
         roleSeller.setName("SELLER");
         roleSeller.getPermissions().add(p3);
-        roleRepo.save(roleSeller);
+        roleSeller = roleRepo.save(roleSeller);
+        Role roleClient = new Role();
+        roleClient.setName("Client");
+        roleClient.getPermissions().add(p4);
+        roleClient = roleRepo.save(roleClient);
         // define user
         final User user = new User();
         user.setActive(true);

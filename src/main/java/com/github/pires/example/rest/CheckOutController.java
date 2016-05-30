@@ -93,7 +93,7 @@ public class CheckOutController {
     public List<CheckOut> getAll() {
         log.info("getAll Checkouts {}");
 
-        return checkoutRepo.findAll();
+        return (List) checkoutRepo.findAll();
     }
 
     @JsonView(View.Summary.class)

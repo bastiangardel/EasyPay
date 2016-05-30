@@ -19,7 +19,6 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.orient.commons.repository.annotation.FetchPlan;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.FetchType;
@@ -88,12 +87,11 @@ public class ReceiptController {
     @RequiresRoles("ADMIN" )
     public List<Receipt> getAll() {
         log.info("Get All Receipt");
-        return receiptRepo.findAll();
+        return (List<Receipt>) receiptRepo.findAll();
     }
 
     @RequestMapping(value = "/pay", method = GET)
     @RequiresAuthentication
-    @FetchPlan("*:-1")
     public ReceiptPayDTO getReceiptToPay(@RequestParam("uuid") String uuid){
 
         log.info("Get Receipt from checkOut : {}", uuid);

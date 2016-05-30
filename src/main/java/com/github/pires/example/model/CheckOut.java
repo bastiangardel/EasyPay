@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.github.pires.example.rest.View;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.orient.commons.repository.annotation.FetchPlan;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,10 +14,13 @@ import java.util.List;
 /**
  * Created by bastiangardel on 15.05.16.
  */
-//@JsonIgnoreProperties(value = {"handler"})
+
+@Entity
+@Table(name = "checkout")
 public class CheckOut {
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @Version
     private Long version;
@@ -47,11 +49,11 @@ public class CheckOut {
         this.created = created;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -98,8 +100,22 @@ public class CheckOut {
         this.version = version;
     }
 
-/*    @PrePersist
+    @PrePersist
     protected void onCreate() {
         created = new Date();
-    }*/
+    }
+
+
+    public CheckOut(Date created, String uuid, List<Receipt> receiptsHistory, User owner, String name) {
+        this.created = created;
+        this.uuid = uuid;
+        this.receiptsHistory = receiptsHistory;
+        this.owner = owner;
+        this.name = name;
+    }
+
+    public CheckOut() {
+    }
+
+
 }

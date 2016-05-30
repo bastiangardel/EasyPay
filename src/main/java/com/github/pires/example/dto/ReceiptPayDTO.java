@@ -7,7 +7,7 @@ import com.github.pires.example.model.Receipt;
  */
 public class ReceiptPayDTO {
     private Double amount;
-    private String id;
+    private Long id;
 
     public Double getAmount() {
         return amount;
@@ -17,11 +17,11 @@ public class ReceiptPayDTO {
         this.amount = amount;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

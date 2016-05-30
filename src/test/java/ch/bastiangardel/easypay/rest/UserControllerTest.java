@@ -1,15 +1,15 @@
-package ch.bastiangardel.easypay.rest;
+package com.github.pires.example.rest;
 
-import ch.bastiangardel.easypay.Application;
-import ch.bastiangardel.easypay.ShiroConfiguration;
-import ch.bastiangardel.easypay.model.Role;
-import ch.bastiangardel.easypay.model.User;
-import ch.bastiangardel.easypay.repository.PermissionRepository;
-import ch.bastiangardel.easypay.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ch.bastiangardel.easypay.model.Permission;
-import ch.bastiangardel.easypay.repository.RoleRepository;
+import com.github.pires.example.Application;
+import com.github.pires.example.ShiroConfiguration;
+import com.github.pires.example.model.Permission;
+import com.github.pires.example.model.Role;
+import com.github.pires.example.model.User;
+import com.github.pires.example.repository.PermissionRepository;
+import com.github.pires.example.repository.RoleRepository;
+import com.github.pires.example.repository.UserRepository;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.DefaultPasswordService;
 import org.springframework.beans.factory.annotation.Autowired;

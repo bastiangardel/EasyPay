@@ -1,17 +1,3 @@
-#spring.data.orient:
-#  url: remote:localhost/test1test
-#  username: root
-#  password: sake56ekas
-#  autocreate: true
-
-
-
-#spring.data.orient:
-#  url: memory:orientdb/test1test
-#  username: admin
-#  password: admin
-
-
 # DataSource settings: set here your own configurations for the database
 # connection. In this example we have "netgloo_blog" as database name and
 # "root" as username and password.

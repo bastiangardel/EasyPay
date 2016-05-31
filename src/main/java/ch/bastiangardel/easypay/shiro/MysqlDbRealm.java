@@ -21,7 +21,7 @@ import java.util.Set;
  * datastore.
  */
 @Component
-public class OrientDbRealm extends AuthorizingRealm {
+public class MysqlDbRealm extends AuthorizingRealm {
 
     @Autowired
     private UserRepository userRepository;

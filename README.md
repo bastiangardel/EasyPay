@@ -1,6 +1,6 @@
 This project is comprehended by the following:
 * Spring Boot REST controller
-* Apache Shiro (1.2.4) session-management with OrientDB-based authorizing realm
+* Apache Shiro (1.2.4) session-management with MySQL-based authorizing realm
 * Hazelcast (3.5.1) powered session distributed persistence
 * MySQL Database with JPA and Hibernate
 

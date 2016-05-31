@@ -65,9 +65,9 @@ public class CheckOutController {
 
         log.info("create new Checkout to user {}", user.getEmail());
 
-        try {
-            checkOut = checkoutRepo.findByUuid(checkOutCreationDTO.getUuid());
-        }catch (IndexOutOfBoundsException e) {
+        checkOut = checkoutRepo.findByUuid(checkOutCreationDTO.getUuid());
+
+        if (checkOut != null) {
 
             List<CheckOut> list = user.getCheckoutInPossesion();
 
@@ -93,7 +93,7 @@ public class CheckOutController {
     public List<CheckOut> getAll() {
         log.info("getAll Checkouts {}");
 
-        return (List) checkoutRepo.findAll();
+        return (List<CheckOut>) checkoutRepo.findAll();
     }
 
     @JsonView(View.Summary.class)

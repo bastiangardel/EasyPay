@@ -1,7 +1,7 @@
 package ch.bastiangardel.easypay;
 
 import ch.bastiangardel.easypay.shiro.HazelcastSessionDao;
-import ch.bastiangardel.easypay.shiro.OrientDbRealm;
+import ch.bastiangardel.easypay.shiro.MysqlDbRealm;
 import org.apache.shiro.authc.credential.DefaultPasswordService;
 import org.apache.shiro.authc.credential.PasswordMatcher;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
@@ -52,8 +52,8 @@ public class ShiroConfiguration {
 
     @Bean(name = "realm")
     @DependsOn("lifecycleBeanPostProcessor")
-    public OrientDbRealm realm() {
-        final OrientDbRealm realm = new OrientDbRealm();
+    public MysqlDbRealm realm() {
+        final MysqlDbRealm realm = new MysqlDbRealm();
         realm.setCredentialsMatcher(credentialsMatcher());
         return realm;
     }

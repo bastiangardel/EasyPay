@@ -1,7 +1,7 @@
 package ch.bastiangardel.easypay.model;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import ch.bastiangardel.easypay.rest.View;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;

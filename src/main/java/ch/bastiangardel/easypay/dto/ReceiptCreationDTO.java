@@ -2,8 +2,6 @@ package ch.bastiangardel.easypay.dto;
 
 import ch.bastiangardel.easypay.model.Receipt;
 
-import java.util.Date;
-
 /**
  * Created by bastiangardel on 18.05.16.
  */

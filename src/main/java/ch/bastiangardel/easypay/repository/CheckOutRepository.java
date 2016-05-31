@@ -2,7 +2,6 @@ package ch.bastiangardel.easypay.repository;
 
 import ch.bastiangardel.easypay.model.CheckOut;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 /**

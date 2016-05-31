@@ -1,12 +1,12 @@
 package ch.bastiangardel.easypay.rest;
 
 import ch.bastiangardel.easypay.dto.CredentialDTO;
+import ch.bastiangardel.easypay.model.CheckOut;
+import ch.bastiangardel.easypay.model.Permission;
 import ch.bastiangardel.easypay.model.Role;
 import ch.bastiangardel.easypay.model.User;
 import ch.bastiangardel.easypay.repository.*;
 import com.fasterxml.jackson.annotation.JsonView;
-import ch.bastiangardel.easypay.model.CheckOut;
-import ch.bastiangardel.easypay.model.Permission;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.credential.DefaultPasswordService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;

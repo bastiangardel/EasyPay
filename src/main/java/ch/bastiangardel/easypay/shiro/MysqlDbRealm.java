@@ -1,9 +1,9 @@
 package ch.bastiangardel.easypay.shiro;
 
+import ch.bastiangardel.easypay.model.Permission;
 import ch.bastiangardel.easypay.model.Role;
 import ch.bastiangardel.easypay.model.User;
 import ch.bastiangardel.easypay.repository.UserRepository;
-import ch.bastiangardel.easypay.model.Permission;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;

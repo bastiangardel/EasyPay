@@ -1,9 +1,7 @@
 package ch.bastiangardel.easypay.dto;
 
-import ch.bastiangardel.easypay.model.User;
 import ch.bastiangardel.easypay.model.CheckOut;
-
-import java.util.Date;
+import ch.bastiangardel.easypay.model.User;
 
 /**
  * Created by bastiangardel on 17.05.16.

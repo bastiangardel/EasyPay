@@ -1,16 +1,16 @@
 package ch.bastiangardel.easypay.rest;
 
-import ch.bastiangardel.easypay.exception.*;
-import com.fasterxml.jackson.annotation.JsonView;
 import ch.bastiangardel.easypay.dto.ReceiptCreationDTO;
 import ch.bastiangardel.easypay.dto.ReceiptPayDTO;
 import ch.bastiangardel.easypay.dto.SuccessMessageDTO;
+import ch.bastiangardel.easypay.exception.*;
 import ch.bastiangardel.easypay.model.CheckOut;
 import ch.bastiangardel.easypay.model.Receipt;
 import ch.bastiangardel.easypay.model.User;
 import ch.bastiangardel.easypay.repository.CheckOutRepository;
 import ch.bastiangardel.easypay.repository.ReceiptRepository;
 import ch.bastiangardel.easypay.repository.UserRepository;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
@@ -19,7 +19,10 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 

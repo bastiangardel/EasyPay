@@ -20,7 +20,7 @@ public class ReceiptCreationDTO {
         tmp.setAmount(amount);
         tmp.setPaid(false);
 
-        tmp.setCreated(new Date());
+        //tmp.setCreated(new Date());
         return tmp;
     }
 

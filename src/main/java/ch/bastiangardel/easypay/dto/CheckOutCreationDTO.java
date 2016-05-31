@@ -20,7 +20,7 @@ public class CheckOutCreationDTO {
         tmp.setUuid(uuid);
         tmp.setName(name);
         tmp.setOwner(user);
-        tmp.setCreated(new Date());
+        //tmp.setCreated(new Date());
         return tmp;
     }
 

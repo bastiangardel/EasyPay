@@ -8,6 +8,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.async.DeferredResult;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -77,14 +78,7 @@ public class Application {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("EasyPay API")
-                .description("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum " +
-                        "has been the industry's standard dummy text ever since the 1500s, when an unknown printer "
-                        + "took a " +
-                        "galley of type and scrambled it to make a type specimen book. It has survived not only five " +
-                        "centuries, but also the leap into electronic typesetting, remaining essentially unchanged. " +
-                        "It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum " +
-                        "passages, and more recently with desktop publishing software like Aldus PageMaker including " +
-                        "versions of Lorem Ipsum.")
+                .description("Système de paiement mobile")
                 .termsOfServiceUrl("http://springfox.io")
                 .contact("springfox")
                 .license("Apache License Version 2.0")

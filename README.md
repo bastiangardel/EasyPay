@@ -60,10 +60,3 @@ curl -i -b cookie.txt -H "Accept: application/json" -X GET https://localhost:900
 
 You should get a ```200 OK``` response status and some JSON representing existing users.
 
-### Access another protected method to which you don't have permission
-
-```
-curl -i -b cookie.txt -H "Accept: application/json" -X GET https://localhost:9000/users/do_something
-```
-
-You should get a ```401 Unauthorized``` response status.

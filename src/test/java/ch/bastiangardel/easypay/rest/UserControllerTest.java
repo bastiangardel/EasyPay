@@ -115,26 +115,4 @@ public class UserControllerTest extends AbstractTestNGSpringContextTests {
         assertThat(response.getStatusCode(), equalTo(HttpStatus.UNAUTHORIZED));
     }
 
-    @Test
-    public void test_get_User_with_no_cookies() throws JsonProcessingException {
-        // authenticate
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-        final ResponseEntity<String> response = new TestRestTemplate().exchange(BASE_URL.concat("/users"),
-                HttpMethod.GET, new HttpEntity<>(headers), String.class);
-        assertThat(response.getStatusCode(), equalTo(HttpStatus.UNAUTHORIZED));
-    }
-
-
-
-    @Test
-    public void test_get_CheckOut_with_no_cookies() throws JsonProcessingException {
-        // authenticate
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-        final ResponseEntity<String> response = new TestRestTemplate().exchange(BASE_URL.concat("/checkouts"),
-                HttpMethod.GET, new HttpEntity<>(headers), String.class);
-        assertThat(response.getStatusCode(), equalTo(HttpStatus.UNAUTHORIZED));
-    }
-
 }

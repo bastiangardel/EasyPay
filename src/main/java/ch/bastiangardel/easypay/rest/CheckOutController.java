@@ -67,7 +67,7 @@ public class CheckOutController {
 
         checkOut = checkoutRepo.findByUuid(checkOutCreationDTO.getUuid());
 
-        if (checkOut != null) {
+        if (checkOut == null) {
 
             List<CheckOut> list = user.getCheckoutInPossesion();
 

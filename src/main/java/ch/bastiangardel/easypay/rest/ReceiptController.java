@@ -56,11 +56,16 @@ public class ReceiptController {
         CheckOut checkOut;
 
 
-        try {
+/*        try {
             checkOut = checkOutRepo.findByUuid(receiptCreationDTO.getUuidCheckout());
         }catch (IndexOutOfBoundsException e){
             throw new CheckOutNotFoundException("Not Found CheckOut with UUID : " + receiptCreationDTO.getUuidCheckout());
-        }
+        }*/
+
+        checkOut = checkOutRepo.findByUuid(receiptCreationDTO.getUuidCheckout());
+
+        if (checkOut == null)
+            throw new CheckOutNotFoundException("Not Found CheckOut with UUID : " + receiptCreationDTO.getUuidCheckout());
 
         final Subject subject = SecurityUtils.getSubject();
 
@@ -71,11 +76,13 @@ public class ReceiptController {
         if(!checkOut.getOwner().getEmail().equals(subject.getSession().getAttribute("email")))
             throw new OwnerException("Your are not the owner of this checkout");
 
-        List<Receipt> list = checkOut.getReceiptsHistory();
+        //List<Receipt> list = checkOut.getReceiptsHistory();
 
         Receipt receipt = receiptRepo.save(receiptCreationDTO.dtoToModel());
 
-        list.add(receipt);
+        checkOut.setLastReceipt(receipt);
+
+        //list.add(receipt);
 
         checkOutRepo.save(checkOut);
 
@@ -99,23 +106,18 @@ public class ReceiptController {
 
         CheckOut checkOut;
 
-        try {
-            checkOut = checkOutRepo.findByUuid(uuid);
-        }catch (IndexOutOfBoundsException e){
+        checkOut = checkOutRepo.findByUuid(uuid);
+        if (checkOut == null)
             throw new CheckOutNotFoundException("Not Found CheckOut with UUID : " + uuid);
-        }
 
 
         ReceiptPayDTO receiptPayDTO = new ReceiptPayDTO();
 
-        List<Receipt> list = checkOut.getReceiptsHistory();
+        Receipt receipt = checkOut.getLastReceipt();
 
-        list.sort((o1, o2) -> o1.getCreated().compareTo(o2.getCreated()));
+        if (receipt == null)
+            throw new NoReceiptToPayExeption("No Receipt to Pay");
 
-        Receipt receipt = list.get(0);
-
-        if (receipt.isPaid())
-            throw new NoReceiptToPayExeption("Receipt with id : " + receipt.getId() + " already pay");
 
         return  receiptPayDTO.modelToDto(receipt);
 
@@ -133,22 +135,19 @@ public class ReceiptController {
 
         final Subject subject = SecurityUtils.getSubject();
 
-        try {
-            checkOut = checkOutRepo.findByUuid(uuid);
-        }catch (IndexOutOfBoundsException e){
+        checkOut = checkOutRepo.findByUuid(uuid);
+
+        if (checkOut == null)
             throw new CheckOutNotFoundException("Not found CheckOut with UUID : " + uuid);
-        }
 
         if(checkOut.getOwner().getEmail() != subject.getSession().getAttribute("email"))
             throw new UnauthorizedException("Your not the owner of this checkout");
 
-        List<Receipt> list = checkOut.getReceiptsHistory();
 
-        list.sort((o1, o2) -> o1.getCreated().compareTo(o2.getCreated()));
+        Receipt receipt = checkOut.getLastReceipt();
 
-        Receipt receipt = list.get(0);
 
-        return  receipt.isPaid();
+        return  receipt == null;
     }
 
     @RequestMapping(value = "/pay", method = POST)
@@ -159,20 +158,18 @@ public class ReceiptController {
         final Subject subject = SecurityUtils.getSubject();
         Receipt receipt;
 
-        try {
-            receipt = receiptRepo.findOne(receiptPayDTO.getId());
-        }catch (IndexOutOfBoundsException e){
+        receipt = receiptRepo.findOne(receiptPayDTO.getId());
+
+        if (receipt == null)
             throw new ReceiptNotFoundException("Not found Receipt with ID : " + receiptPayDTO.getId());
-        }
 
 
         CheckOut checkOut;
 
-        try {
-            checkOut = checkOutRepo.findByUuid(uuid);
-        }catch (IndexOutOfBoundsException e){
+        checkOut = checkOutRepo.findByUuid(uuid);
+
+        if (checkOut == null)
             throw new CheckOutNotFoundException("Not found CheckOut with UUID : " + uuid);
-        }
 
         User owner = checkOut.getOwner();
 
@@ -185,6 +182,9 @@ public class ReceiptController {
             throw new NotEnoughMoneyException("You have not enough money in your account!!");
 
 
+        checkOut.setLastReceipt(null);
+        List<Receipt> listreceipt = checkOut.getReceiptsHistory();
+        listreceipt.add(receipt);
         receipt.setPaid(true);
 
         user.setAmount(user.getAmount() - receipt.getAmount());
@@ -199,6 +199,7 @@ public class ReceiptController {
         userRepo.save(user);
         userRepo.save(owner);
         receiptRepo.save(receipt);
+        checkOutRepo.save(checkOut);
 
         return new SuccessMessageDTO("Payment executed with Success");
 

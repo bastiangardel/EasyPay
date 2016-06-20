@@ -39,6 +39,10 @@ public class CheckOut {
     @OneToMany
     private List<Receipt> receiptsHistory;
 
+
+    @OneToOne
+    private Receipt lastReceipt;
+
     public Date getCreated() {
         return created;
     }
@@ -98,18 +102,27 @@ public class CheckOut {
         this.version = version;
     }
 
+    public Receipt getLastReceipt() {
+        return lastReceipt;
+    }
+
+    public void setLastReceipt(Receipt lastReceipt) {
+        this.lastReceipt = lastReceipt;
+    }
+
     @PrePersist
     protected void onCreate() {
         created = new Date();
     }
 
 
-    public CheckOut(Date created, String uuid, List<Receipt> receiptsHistory, User owner, String name) {
+    public CheckOut(Date created, String uuid, List<Receipt> receiptsHistory, User owner, String name, Receipt lastReceipt) {
         this.created = created;
         this.uuid = uuid;
         this.receiptsHistory = receiptsHistory;
         this.owner = owner;
         this.name = name;
+        this.lastReceipt = lastReceipt;
     }
 
     public CheckOut() {

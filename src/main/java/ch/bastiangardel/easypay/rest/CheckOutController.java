@@ -56,12 +56,18 @@ public class CheckOutController {
         if (email == null)
             email = "";
 
-        try {
+/*        try {
              user = userRepo.findByEmail(email);
         }
         catch (IndexOutOfBoundsException e) {
             throw new UserNotFoundException("Not found User with Username : " + email);
-        }
+        }*/
+
+        user = userRepo.findByEmail(email);
+
+        if (user == null)
+            throw new UserNotFoundException("Not found User with Username : " + email);
+
 
         log.info("create new Checkout to user {}", user.getEmail());
 

@@ -1,6 +1,7 @@
 package ch.bastiangardel.easypay.rest;
 
 import ch.bastiangardel.easypay.dto.CheckOutCreationDTO;
+import ch.bastiangardel.easypay.dto.CheckOutSummaryDTO;
 import ch.bastiangardel.easypay.dto.SuccessMessageDTO;
 import ch.bastiangardel.easypay.exception.UUIDAlreadyInUseException;
 import ch.bastiangardel.easypay.exception.UserNotFoundException;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -55,13 +57,6 @@ public class CheckOutController {
 
         if (email == null)
             email = "";
-
-/*        try {
-             user = userRepo.findByEmail(email);
-        }
-        catch (IndexOutOfBoundsException e) {
-            throw new UserNotFoundException("Not found User with Username : " + email);
-        }*/
 
         user = userRepo.findByEmail(email);
 
@@ -102,16 +97,25 @@ public class CheckOutController {
         return (List<CheckOut>) checkoutRepo.findAll();
     }
 
-    @JsonView(View.Summary.class)
     @RequestMapping(value = "/checkoutlist", method = GET)
     @RequiresAuthentication
-    public List<CheckOut> getUserCheckOuts() {
+    @RequiresRoles("SELLER")
+    public List<CheckOutSummaryDTO> getUserCheckOuts() {
         log.info("get User Checkouts {}");
         final Subject subject = SecurityUtils.getSubject();
         String email = (String) subject.getSession().getAttribute("email");
 
         User user = userRepo.findByEmail(email);
 
-        return user.getCheckoutInPossesion();
+        List<CheckOutSummaryDTO> list = new LinkedList<>();
+        for(CheckOut checkOut : user.getCheckoutInPossesion())
+        {
+            CheckOutSummaryDTO checkOutSummaryDTO = new CheckOutSummaryDTO();
+            checkOutSummaryDTO.modelToDto(checkOut);
+            list.add(checkOutSummaryDTO);
+
+        }
+
+        return list;
     }
 }

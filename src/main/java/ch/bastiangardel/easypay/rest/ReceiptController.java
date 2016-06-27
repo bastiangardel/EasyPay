@@ -1,8 +1,6 @@
 package ch.bastiangardel.easypay.rest;
 
-import ch.bastiangardel.easypay.dto.ReceiptCreationDTO;
-import ch.bastiangardel.easypay.dto.ReceiptPayDTO;
-import ch.bastiangardel.easypay.dto.SuccessMessageDTO;
+import ch.bastiangardel.easypay.dto.*;
 import ch.bastiangardel.easypay.exception.*;
 import ch.bastiangardel.easypay.model.CheckOut;
 import ch.bastiangardel.easypay.model.Receipt;
@@ -24,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -76,13 +75,9 @@ public class ReceiptController {
         if(!checkOut.getOwner().getEmail().equals(subject.getSession().getAttribute("email")))
             throw new OwnerException("Your are not the owner of this checkout");
 
-        //List<Receipt> list = checkOut.getReceiptsHistory();
-
         Receipt receipt = receiptRepo.save(receiptCreationDTO.dtoToModel());
 
         checkOut.setLastReceipt(receipt);
-
-        //list.add(receipt);
 
         checkOutRepo.save(checkOut);
 
@@ -96,6 +91,32 @@ public class ReceiptController {
     public List<Receipt> getAll() {
         log.info("Get All Receipt");
         return (List<Receipt>) receiptRepo.findAll();
+    }
+
+    @RequestMapping(value = "/history", method = GET)
+    @RequiresAuthentication
+    public List<ReceiptHistoryDTO> getReceiptHistory(@RequestParam("uuid") String uuid){
+
+        log.info("Get Receipt History from checkOut : {}", uuid);
+
+        CheckOut checkOut;
+
+        checkOut = checkOutRepo.findByUuid(uuid);
+        if (checkOut == null)
+            throw new CheckOutNotFoundException("Not Found CheckOut with UUID : " + uuid);
+
+        List<ReceiptHistoryDTO> list = new LinkedList<>();
+        for(Receipt receipt : checkOut.getReceiptsHistory())
+        {
+            ReceiptHistoryDTO receiptPayDTO = new ReceiptHistoryDTO();
+            receiptPayDTO.modelToDto(receipt);
+            list.add(receiptPayDTO);
+
+        }
+
+
+        return  list;
+
     }
 
     @RequestMapping(value = "/pay", method = GET)
@@ -121,33 +142,6 @@ public class ReceiptController {
 
         return  receiptPayDTO.modelToDto(receipt);
 
-    }
-
-
-    @RequestMapping(value = "/isPay", method = GET)
-    @RequiresAuthentication
-    @RequiresRoles("SELLER")
-    public Boolean lastReceiptIsPay(@RequestParam("uuid") String uuid){
-
-        log.info("Verfify last receipt from checkOut {} is pay", uuid);
-
-        CheckOut checkOut;
-
-        final Subject subject = SecurityUtils.getSubject();
-
-        checkOut = checkOutRepo.findByUuid(uuid);
-
-        if (checkOut == null)
-            throw new CheckOutNotFoundException("Not found CheckOut with UUID : " + uuid);
-
-        if(checkOut.getOwner().getEmail() != subject.getSession().getAttribute("email"))
-            throw new UnauthorizedException("Your not the owner of this checkout");
-
-
-        Receipt receipt = checkOut.getLastReceipt();
-
-
-        return  receipt == null;
     }
 
     @RequestMapping(value = "/pay", method = POST)

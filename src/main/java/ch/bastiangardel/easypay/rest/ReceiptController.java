@@ -55,12 +55,6 @@ public class ReceiptController {
         CheckOut checkOut;
 
 
-/*        try {
-            checkOut = checkOutRepo.findByUuid(receiptCreationDTO.getUuidCheckout());
-        }catch (IndexOutOfBoundsException e){
-            throw new CheckOutNotFoundException("Not Found CheckOut with UUID : " + receiptCreationDTO.getUuidCheckout());
-        }*/
-
         checkOut = checkOutRepo.findByUuid(receiptCreationDTO.getUuidCheckout());
 
         if (checkOut == null)

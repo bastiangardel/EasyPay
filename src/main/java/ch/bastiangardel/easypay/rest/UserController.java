@@ -74,13 +74,6 @@ public class UserController {
         subject.logout();
     }
 
-    @RequestMapping(value = "/signin", method = POST)
-    public void signin(@RequestBody User user) {
-        log.info("signin {}", user.getEmail());
-
-        userRepo.save(user);
-    }
-
     @JsonView(View.Summary.class)
     @RequestMapping(method = GET)
     @RequiresAuthentication
@@ -88,25 +81,6 @@ public class UserController {
     public List<User> getAll() {
         log.info("Get All User");
         return (List<User>)userRepo.findAll();
-    }
-
-    @RequestMapping(value = "/test", method = POST)
-    @RequiresAuthentication
-    public void test() {
-
-        User user = userRepo.findByEmail("test2@test.com");
-
-
-        CheckOut checkOut = checkOutRepo.save(new CheckOut());
-
-        user.getCheckoutInPossesion().add(checkOut);
-
-        user.setName("dudu toto");
-
-        userRepo.save(user);
-
-        log.info("test");
-
     }
 
     @RequestMapping(method = PUT)

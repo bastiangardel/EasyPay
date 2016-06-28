@@ -70,4 +70,10 @@ public class ApplicationExceptionHandler {
             {NotEnoughMoneyException.class})
     public void notEnoughMoney() {
     }
+
+    @ResponseStatus(value = HttpStatus.PRECONDITION_FAILED, reason = "There is already a receipt to pay in this checkout")
+    @ExceptionHandler(
+            {ReceiptToPayAlreadyExist.class})
+    public void receiptToPayAlreadyPresent() {
+    }
 }

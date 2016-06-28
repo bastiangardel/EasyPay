@@ -3,11 +3,12 @@ package ch.bastiangardel.easypay.rest;
 import ch.bastiangardel.easypay.dto.CheckOutCreationDTO;
 import ch.bastiangardel.easypay.dto.CheckOutSummaryDTO;
 import ch.bastiangardel.easypay.dto.SuccessMessageDTO;
-import ch.bastiangardel.easypay.exception.UUIDAlreadyInUseException;
-import ch.bastiangardel.easypay.exception.UserNotFoundException;
+import ch.bastiangardel.easypay.exception.*;
 import ch.bastiangardel.easypay.model.CheckOut;
+import ch.bastiangardel.easypay.model.Receipt;
 import ch.bastiangardel.easypay.model.User;
 import ch.bastiangardel.easypay.repository.CheckOutRepository;
+import ch.bastiangardel.easypay.repository.ReceiptRepository;
 import ch.bastiangardel.easypay.repository.UserRepository;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.apache.shiro.SecurityUtils;
@@ -19,11 +20,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -40,9 +43,12 @@ public class CheckOutController {
     @Autowired
     private UserRepository userRepo;
 
-
     @Autowired
     private CheckOutRepository checkoutRepo;
+
+
+    @Autowired
+    private ReceiptRepository receiptRepo;
 
     @RequestMapping(method = POST)
     @RequiresAuthentication
@@ -117,5 +123,41 @@ public class CheckOutController {
         }
 
         return list;
+    }
+
+    @RequestMapping(value = "/receipttopay", method = DELETE)
+    @RequiresAuthentication
+    @RequiresRoles("SELLER")
+    public void deleteLastreceipt(@RequestParam("uuid") String uuid) {
+        CheckOut checkOut;
+
+
+        checkOut = checkoutRepo.findByUuid(uuid);
+
+        if (checkOut == null)
+            throw new CheckOutNotFoundException("Not Found CheckOut with UUID : " + uuid);
+
+        final Subject subject = SecurityUtils.getSubject();
+
+
+
+        if(!checkOut.getOwner().getEmail().equals(subject.getSession().getAttribute("email")))
+            throw new OwnerException("Your are not the owner of this checkout");
+
+
+        Receipt receipt = checkOut.getLastReceipt();
+
+
+        if (receipt == null)
+            throw new NoReceiptToPayExeption("No Receipt to Delete");
+
+
+
+
+        checkOut.setLastReceipt(null);
+
+        checkoutRepo.save(checkOut);
+
+        receiptRepo.delete(receipt);
     }
 }

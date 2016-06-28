@@ -69,6 +69,9 @@ public class ReceiptController {
         if(!checkOut.getOwner().getEmail().equals(subject.getSession().getAttribute("email")))
             throw new OwnerException("Your are not the owner of this checkout");
 
+        if(checkOut.getLastReceipt() != null)
+            throw new ReceiptToPayAlreadyExist("There is already a receipt to pay in this checkout");
+
         Receipt receipt = receiptRepo.save(receiptCreationDTO.dtoToModel());
 
         checkOut.setLastReceipt(receipt);

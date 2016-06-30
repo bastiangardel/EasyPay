@@ -9,6 +9,7 @@ public class ReceiptCreationDTO {
 
     private String uuidCheckout;
     private Double amount;
+    private String deviceToken;
 
     public Receipt dtoToModel()
     {
@@ -17,8 +18,7 @@ public class ReceiptCreationDTO {
 
         tmp.setAmount(amount);
         tmp.setPaid(false);
-
-        //tmp.setCreated(new Date());
+        tmp.setDeviceToken(deviceToken);
         return tmp;
     }
 
@@ -36,5 +36,13 @@ public class ReceiptCreationDTO {
 
     public void setUuidCheckout(String uuidCheckout) {
         this.uuidCheckout = uuidCheckout;
+    }
+
+    public String getDeviceToken() {
+        return deviceToken;
+    }
+
+    public void setDeviceToken(String deviceToken) {
+        this.deviceToken = deviceToken;
     }
 }

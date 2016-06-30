@@ -9,6 +9,8 @@ import ch.bastiangardel.easypay.repository.CheckOutRepository;
 import ch.bastiangardel.easypay.repository.ReceiptRepository;
 import ch.bastiangardel.easypay.repository.UserRepository;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.notnoop.apns.APNS;
+import com.notnoop.apns.ApnsService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
@@ -186,6 +188,28 @@ public class ReceiptController {
 
         List<Receipt> list = user.getReceiptHistory();
         list.add(receipt);
+
+
+        ApnsService service = APNS.newService()
+                .withCert("apns.p12", "sake56ekas")
+                .withSandboxDestination()
+                .build();
+
+        String payload = APNS.newPayload()
+                .alertBody("Receipt " + receipt.getId()+ " on checkout " + uuid + " payed by " + user.getName())
+                .alertTitle("Receipt Payed").build();
+
+        String token = receipt.getDeviceToken();
+
+        if (token != "")
+        {
+
+            log.info("Playload : {}", payload);
+
+            service.push(token, payload);
+
+            log.info("The notification has been hopefully sent");
+        }
 
         userRepo.save(user);
         userRepo.save(owner);

@@ -35,6 +35,8 @@ public class Receipt {
     @OneToOne
     private User paiyedBy;
 
+    private String deviceToken;
+
     public Double getAmount() {
         return amount;
     }
@@ -83,11 +85,21 @@ public class Receipt {
         this.paiyedBy = paiyedBy;
     }
 
+    public String getDeviceToken() {
+        return deviceToken;
+    }
+
+    public void setDeviceToken(String deviceToken) {
+        this.deviceToken = deviceToken;
+    }
+
     public Receipt(Double amount, User paiyedBy, boolean paid) {
         this.amount = amount;
         this.paiyedBy = paiyedBy;
         this.paid = paid;
     }
+
+
 
     public Receipt() {
     }

@@ -137,7 +137,8 @@ public class UserController {
         user2.setPassword(passwordService.encryptPassword("test"));
         user2.getRoles().add(roleSeller);
         user2.setAmount(100.0);
-        userRepo.save(user2);
+
+        User usercheckout = userRepo.save(user2);
 
         final User user3 = new User();
         user3.setActive(true);
@@ -148,6 +149,21 @@ public class UserController {
         user3.getRoles().add(roleSeller);
         user3.setAmount(100.0);
         userRepo.save(user3);
+
+        CheckOut checkOut = new CheckOut();
+
+        checkOut.setName("c1");
+        checkOut.setOwner(usercheckout);
+        checkOut.setUuid("C696E65A-CF37-659A-6D45-7DF4E396DA53");
+
+        checkOut = checkOutRepo.save(checkOut);
+
+        List<CheckOut> list = usercheckout.getCheckoutInPossesion();
+
+        list.add(checkOut);
+
+        userRepo.save(usercheckout);
+
 
         log.info("Scenario initiated.");
     }

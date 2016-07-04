@@ -2,6 +2,7 @@ package ch.bastiangardel.easypay.repository;
 
 import ch.bastiangardel.easypay.model.Receipt;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 /**

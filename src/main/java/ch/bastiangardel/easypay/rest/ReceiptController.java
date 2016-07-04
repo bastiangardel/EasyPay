@@ -11,6 +11,7 @@ import ch.bastiangardel.easypay.repository.UserRepository;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.notnoop.apns.APNS;
 import com.notnoop.apns.ApnsService;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;

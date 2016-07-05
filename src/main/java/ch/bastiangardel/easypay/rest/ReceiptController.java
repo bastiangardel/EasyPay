@@ -203,7 +203,7 @@ public class ReceiptController {
 
         String payload = APNS.newPayload()
                 .alertBody("Receipt " + receipt.getId()+ " on checkout " + uuid + " payed by " + user.getName())
-                .alertTitle("Receipt Payed").build();
+                .alertTitle("Receipt Payed").customField("uuid", uuid).build();
 
         String token = receipt.getDeviceToken();
 

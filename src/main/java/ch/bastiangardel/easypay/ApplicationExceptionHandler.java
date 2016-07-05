@@ -71,6 +71,12 @@ public class ApplicationExceptionHandler {
     public void notEnoughMoney() {
     }
 
+    @ResponseStatus(value = HttpStatus.PRECONDITION_FAILED, reason = "There is not enough money in this account!")
+    @ExceptionHandler(
+            {NotEnoughMoneyDebitException.class})
+    public void notEnoughMoneyDebit() {
+    }
+
     @ResponseStatus(value = HttpStatus.PRECONDITION_FAILED, reason = "There is already a receipt to pay in this checkout")
     @ExceptionHandler(
             {ReceiptToPayAlreadyExist.class})

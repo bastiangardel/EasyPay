@@ -1,12 +1,17 @@
 package ch.bastiangardel.easypay.rest;
 
 import ch.bastiangardel.easypay.dto.CredentialDTO;
+import ch.bastiangardel.easypay.dto.SuccessMessageDTO;
+import ch.bastiangardel.easypay.exception.NotEnoughMoneyDebitException;
+import ch.bastiangardel.easypay.exception.NotEnoughMoneyException;
+import ch.bastiangardel.easypay.exception.UserNotFoundException;
 import ch.bastiangardel.easypay.model.CheckOut;
 import ch.bastiangardel.easypay.model.Permission;
 import ch.bastiangardel.easypay.model.Role;
 import ch.bastiangardel.easypay.model.User;
 import ch.bastiangardel.easypay.repository.*;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.ser.std.StdArraySerializers;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.credential.DefaultPasswordService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
@@ -17,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -72,6 +78,45 @@ public class UserController {
         final Subject subject = SecurityUtils.getSubject();
         log.info("logout {}",subject.getSession().getAttribute("email"));
         subject.logout();
+    }
+
+    @RequestMapping(value = "/credit", method = POST)
+    @RequiresAuthentication
+    @RequiresRoles("ADMIN")
+    public SuccessMessageDTO creditAccount(@RequestParam String username, @RequestParam Double credit){
+        log.info("credit: {}" , username);
+
+        User user = userRepo.findByEmail(username);
+
+        if (user == null)
+            throw new UserNotFoundException("Not found User with Username : " + username);
+
+        Double amount = user.getAmount();
+        user.setAmount(amount + credit);
+
+        userRepo.save(user);
+
+        return new SuccessMessageDTO("Credit with Success");
+    }
+
+    @RequestMapping(value = "/debit", method = POST)
+    @RequiresAuthentication
+    @RequiresRoles("ADMIN")
+    public SuccessMessageDTO debitAccount(@RequestParam String username, @RequestParam Double debit){
+        log.info("debit: {}" , username);
+
+        User user = userRepo.findByEmail(username);
+
+        if (user == null)
+            throw new UserNotFoundException("Not found User with Username : " + username);
+
+        if (debit > user.getAmount())
+            throw new NotEnoughMoneyDebitException("There is not enough money in this account!!");
+
+        Double amount = user.getAmount();
+        user.setAmount(amount - debit);
+
+        return new SuccessMessageDTO("Debit with Success");
     }
 
     @JsonView(View.Summary.class)

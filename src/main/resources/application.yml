@@ -20,8 +20,11 @@ spring.jpa.hibernate.naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
 spring.jpa.properties.hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
 
 
-logging.level.org.hibernate.SQL: DEBUG
+logging.level.org.hibernate.SQL: INFO
 logging.level.org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+
+logging.level.org.springframework.web: INFO
 
 server.port: 9000
 server.ssl.enabled: true
@@ -30,8 +33,9 @@ server.ssl.key-store-password: Cyberspider
 server.ssl.keyStoreType: PKCS12
 server.ssl.keyAlias: tomcat
 
-endpoints.enabled: false
 
+
+endpoints.enabled: false
 
 
 

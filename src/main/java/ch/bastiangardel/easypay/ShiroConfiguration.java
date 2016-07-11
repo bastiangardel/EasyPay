@@ -8,10 +8,14 @@ import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.mgt.WebSecurityManager;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * TODO add description
@@ -24,6 +28,12 @@ public class ShiroConfiguration {
         ShiroFilterFactoryBean factoryBean = new ShiroFilterFactoryBean();
         factoryBean.setSecurityManager(securityManager());
 
+        Map<String, String> filterChainDefinitionMapping = new HashMap<>();
+        filterChainDefinitionMapping.put("/","ssl[9000]");
+
+        factoryBean.setFilterChainDefinitionMap(filterChainDefinitionMapping);
+
+
         return factoryBean;
     }
 
@@ -33,6 +43,7 @@ public class ShiroConfiguration {
                 = new DefaultWebSecurityManager();
         securityManager.setRealm(realm());
         securityManager.setSessionManager(sessionManager());
+
         return securityManager;
     }
 
@@ -41,7 +52,7 @@ public class ShiroConfiguration {
         final DefaultWebSessionManager sessionManager
                 = new DefaultWebSessionManager();
         sessionManager.setSessionDAO(sessionDao());
-        sessionManager.setGlobalSessionTimeout(3600000); // 1 hour
+        sessionManager.setGlobalSessionTimeout(3600000); // 1 hours
         return sessionManager;
     }
 

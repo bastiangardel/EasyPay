@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -32,6 +33,12 @@ public class ApplicationExceptionHandler {
     public void owner() {
     }
 
+
+    @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "You are not the owner of this checkout")
+    @ExceptionHandler(
+            {NoHandlerFoundException.class})
+    public void noHandler() {
+    }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(

@@ -39,6 +39,7 @@ public class Application {
                     }
                     return false;
                 });
+
         new SpringApplicationBuilder()
                 .sources(Application.class)
                 .showBanner(false)

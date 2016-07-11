@@ -29,6 +29,5 @@ public class WebSecurityConfig extends
                 .maxAgeInSeconds(31536000);
 
 
-
     }
 }

@@ -28,11 +28,6 @@ public class ShiroConfiguration {
         ShiroFilterFactoryBean factoryBean = new ShiroFilterFactoryBean();
         factoryBean.setSecurityManager(securityManager());
 
-        Map<String, String> filterChainDefinitionMapping = new HashMap<>();
-        filterChainDefinitionMapping.put("/","ssl[9000]");
-
-        factoryBean.setFilterChainDefinitionMap(filterChainDefinitionMapping);
-
 
         return factoryBean;
     }

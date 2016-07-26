@@ -34,13 +34,6 @@ server.ssl.keyStoreType: PKCS12
 server.ssl.keyAlias: tomcat
 
 
-
-
 endpoints.enabled: false
-
-
-
--- server.ssl.client-auth: need
-
 
 security.headers.xss: false

@@ -34,7 +34,7 @@ public class ApplicationExceptionHandler {
     }
 
 
-    @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "You are not the owner of this checkout")
+    @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "No Handler Found")
     @ExceptionHandler(
             {NoHandlerFoundException.class})
     public void noHandler() {

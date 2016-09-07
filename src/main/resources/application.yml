@@ -37,3 +37,5 @@ server.ssl.keyAlias: tomcat
 endpoints.enabled: false
 
 security.headers.xss: false
+
+server.error.whitelabel.enabled: false

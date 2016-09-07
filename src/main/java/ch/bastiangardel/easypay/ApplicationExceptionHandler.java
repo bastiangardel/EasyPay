@@ -34,19 +34,6 @@ public class ApplicationExceptionHandler {
     }
 
 
-    @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "No Handler Found")
-    @ExceptionHandler(
-            {NoHandlerFoundException.class})
-    public void noHandler() {
-    }
-
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(
-            {EntityNotFoundException.class})
-    public void ressourceNotFound() {
-    }
-
-
     @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "This CheckOut is not found in the system!")
     @ExceptionHandler(
             {CheckOutNotFoundException.class})
